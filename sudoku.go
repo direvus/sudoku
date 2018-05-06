@@ -54,3 +54,11 @@ func (puz *Puzzle) Read(input []byte) error {
     }
     return nil
 }
+
+// Validate a puzzle for correctness.
+//
+// A puzzle is incorrect if it contains the same glyph more than once on any
+// line, any column, or in any of the nine 3×3 subgrids.
+func (puz *Puzzle) Validate() error {
+    return nil
+}
