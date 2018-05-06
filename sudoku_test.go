@@ -1,6 +1,9 @@
 package sudoku
 
-import "testing"
+import (
+	"bytes"
+	"testing"
+)
 
 func TestPuzzleRead(t *testing.T) {
 	var puz Puzzle
@@ -78,6 +81,105 @@ func TestPuzzleRead(t *testing.T) {
 			"_ 1 2 _ 4 5 _ 7 8\n"))
 	if err == nil {
 		t.Errorf("no error for insufficient glyphs in row 6")
+	}
+}
+
+func TestPuzzleRow(t *testing.T) {
+	puz := Puzzle{
+		{'1', ' ', '3', ' ', ' ', '6', ' ', '8', ' '},
+		{' ', '5', ' ', ' ', '8', ' ', '1', '2', ' '},
+		{'7', ' ', '9', '1', ' ', '3', ' ', '5', '6'},
+		{' ', '3', ' ', ' ', '6', '7', ' ', '9', ' '},
+		{'5', ' ', '7', '8', ' ', ' ', ' ', '3', ' '},
+		{'8', ' ', '1', ' ', '3', ' ', '5', ' ', '7'},
+		{' ', '4', ' ', ' ', '7', '8', ' ', '1', ' '},
+		{'6', ' ', '8', ' ', ' ', '2', ' ', '4', ' '},
+		{' ', '1', '2', ' ', '4', '5', ' ', '7', '8'}}
+	r := 0
+	expect := []byte{'1', ' ', '3', ' ', ' ', '6', ' ', '8', ' '}
+	row := puz.Row(r)
+	if !bytes.Equal(row, expect) {
+		t.Errorf("incorrect value for row %v, expected %v, got %v", r+1, expect, row)
+	}
+
+	r = 1
+	expect = []byte{' ', '5', ' ', ' ', '8', ' ', '1', '2', ' '}
+	row = puz.Row(r)
+	if !bytes.Equal(row, expect) {
+		t.Errorf("incorrect value for row %v, expected %v, got %v", r+1, expect, row)
+	}
+
+	r = 8
+	expect = []byte{' ', '1', '2', ' ', '4', '5', ' ', '7', '8'}
+	row = puz.Row(r)
+	if !bytes.Equal(row, expect) {
+		t.Errorf("incorrect value for row %v, expected %v, got %v", r+1, expect, row)
+	}
+}
+
+func TestPuzzleColumn(t *testing.T) {
+	puz := Puzzle{
+		{'1', ' ', '3', ' ', ' ', '6', ' ', '8', ' '},
+		{' ', '5', ' ', ' ', '8', ' ', '1', '2', ' '},
+		{'7', ' ', '9', '1', ' ', '3', ' ', '5', '6'},
+		{' ', '3', ' ', ' ', '6', '7', ' ', '9', ' '},
+		{'5', ' ', '7', '8', ' ', ' ', ' ', '3', ' '},
+		{'8', ' ', '1', ' ', '3', ' ', '5', ' ', '7'},
+		{' ', '4', ' ', ' ', '7', '8', ' ', '1', ' '},
+		{'6', ' ', '8', ' ', ' ', '2', ' ', '4', ' '},
+		{' ', '1', '2', ' ', '4', '5', ' ', '7', '8'}}
+	c := 0
+	expect := []byte{'1', ' ', '7', ' ', '5', '8', ' ', '6', ' '}
+	column := puz.Column(c)
+	if !bytes.Equal(column, expect) {
+		t.Errorf("incorrect value for column %v, expected %v, got %v", c+1, expect, column)
+	}
+
+	c = 1
+	expect = []byte{' ', '5', ' ', '3', ' ', ' ', '4', ' ', '1'}
+	column = puz.Column(c)
+	if !bytes.Equal(column, expect) {
+		t.Errorf("incorrect value for column %v, expected %v, got %v", c+1, expect, column)
+	}
+
+	c = 8
+	expect = []byte{' ', ' ', '6', ' ', ' ', '7', ' ', ' ', '8'}
+	column = puz.Column(c)
+	if !bytes.Equal(column, expect) {
+		t.Errorf("incorrect value for column %v, expected %v, got %v", c+1, expect, column)
+	}
+}
+
+func TestPuzzleSubGrid(t *testing.T) {
+	puz := Puzzle{
+		{'1', ' ', '3', ' ', ' ', '6', ' ', '8', ' '},
+		{' ', '5', ' ', ' ', '8', ' ', '1', '2', ' '},
+		{'7', ' ', '9', '1', ' ', '3', ' ', '5', '6'},
+		{' ', '3', ' ', ' ', '6', '7', ' ', '9', ' '},
+		{'5', ' ', '7', '8', ' ', ' ', ' ', '3', ' '},
+		{'8', ' ', '1', ' ', '3', ' ', '5', ' ', '7'},
+		{' ', '4', ' ', ' ', '7', '8', ' ', '1', ' '},
+		{'6', ' ', '8', ' ', ' ', '2', ' ', '4', ' '},
+		{' ', '1', '2', ' ', '4', '5', ' ', '7', '8'}}
+	g := 0
+	expect := []byte{'1', ' ', '3', ' ', '5', ' ', '7', ' ', '9'}
+	subgrid := puz.SubGrid(g)
+	if !bytes.Equal(subgrid, expect) {
+		t.Errorf("incorrect value for subgrid %v, expected %v, got %v", g+1, expect, subgrid)
+	}
+
+	g = 1
+	expect = []byte{' ', ' ', '6', ' ', '8', ' ', '1', ' ', '3'}
+	subgrid = puz.SubGrid(g)
+	if !bytes.Equal(subgrid, expect) {
+		t.Errorf("incorrect value for subgrid %v, expected %v, got %v", g+1, expect, subgrid)
+	}
+
+	g = 8
+	expect = []byte{' ', '1', ' ', ' ', '4', ' ', ' ', '7', '8'}
+	subgrid = puz.SubGrid(g)
+	if !bytes.Equal(subgrid, expect) {
+		t.Errorf("incorrect value for subgrid %v, expected %v, got %v", g+1, expect, subgrid)
 	}
 }
 

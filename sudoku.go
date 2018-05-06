@@ -7,8 +7,10 @@ import (
 
 // Size is the number of rows and columns of a sudoku puzzle.
 const Size = 9
+
 // SubSize is the number of rows and columns of a sudoku subgrid.
 const SubSize = 3
+
 // Unknown is the glyph that indicates a masked or unknown value.
 const Unknown byte = ' '
 
