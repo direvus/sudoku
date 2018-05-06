@@ -9,10 +9,7 @@ import (
 const Size = 9
 
 // Puzzle represents a 9×9 sudoku grid.
-type Puzzle struct {
-    // cells contain glyphs 1 through 9, or zero for an unknown value.
-    cells [Size][Size]byte
-}
+type Puzzle [Size][Size]byte
 
 // Read in a puzzle definition from a slice of bytes.
 //
@@ -30,7 +27,7 @@ type Puzzle struct {
 // _ 4 _ _ 7 8 _ 1 _
 // 6 _ 8 _ _ 2 _ 4 _
 // _ 1 2 _ 4 5 _ 7 8
-func (puzzle *Puzzle) Read(input []byte) error {
+func (puz *Puzzle) Read(input []byte) error {
     ending := []byte("\n")
     lines := bytes.Split(bytes.TrimSpace(input), ending)
     if len(lines) != Size {
@@ -45,11 +42,11 @@ func (puzzle *Puzzle) Read(input []byte) error {
         for j := 0; j < Size; j++ {
             glyph := line[j*2]
             if glyph == '_' {
-                // Masked value, set cell to zero for "unknown".
-                puzzle.cells[i][j] = 0
+                // Masked value, set cell to space for "unknown".
+                puz[i][j] = ' '
             } else if glyph >= '1' && glyph <= '9' {
                 // Known value.
-                puzzle.cells[i][j] = glyph
+                puz[i][j] = glyph
             } else {
                 return fmt.Errorf("malformed input on line %v: expected underscore or digit 1-9 in column %v, got %v", i+1, j, glyph)
             }
