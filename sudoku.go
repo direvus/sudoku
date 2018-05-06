@@ -77,42 +77,68 @@ func findDuplicate(input []byte) byte {
 	return 0
 }
 
+// Row returns one row from a puzzle as a slice of bytes.
+//
+// Rows are indexed from top to bottom, beginning with zero.
+func (puz *Puzzle) Row(index int) []byte {
+	return puz[index][:]
+}
+
+// Column returns one column from a puzzle as a slice of bytes.
+//
+// Columns are indexed from left to right, beginning with zero.
+func (puz *Puzzle) Column(index int) []byte {
+	var col [Size]byte
+	for r := 0; r < Size; r++ {
+		col[r] = puz[r][index]
+	}
+	return col[:]
+}
+
+// SubGrid returns one subgrid from a puzzle as a slice of bytes.
+//
+// Subgrids are indexed in left to right, top to bottom order, beginning with
+// zero.  The returned slice contains bytes from the subgrid in the same order:
+//
+// 0 1 2
+// 3 4 5
+// 6 7 8
+func (puz *Puzzle) SubGrid(index int) []byte {
+	r := (index / SubSize) * SubSize
+	c := (index % SubSize) * SubSize
+	subgrid := []byte{}
+	for i := 0; i < SubSize; i++ {
+		for j := 0; j < SubSize; j++ {
+			subgrid = append(subgrid, puz[r+i][c+j])
+		}
+	}
+	return subgrid
+}
+
 // Validate a puzzle for correctness.
 //
 // A puzzle is incorrect if it contains the same glyph more than once on any
 // line, any column, or in any of the nine 3×3 subgrids.
 func (puz *Puzzle) Validate() error {
 	// Rows
-	for i, row := range puz {
-		dup := findDuplicate(row[:])
+	for i := 0; i < Size; i++ {
+		dup := findDuplicate(puz.Row(i))
 		if dup != 0 {
 			return fmt.Errorf("invalid puzzle: duplicate %v in row %v", dup, i+1)
 		}
 	}
 	// Columns
 	for i := 0; i < Size; i++ {
-		var col [Size]byte
-		for j := 0; j < Size; j++ {
-			col[j] = puz[j][i]
-		}
-		dup := findDuplicate(col[:])
+		dup := findDuplicate(puz.Column(i))
 		if dup != 0 {
 			return fmt.Errorf("invalid puzzle: duplicate %v in col %v", dup, i+1)
 		}
 	}
 	// Subgrids
 	for i := 0; i < Size; i++ {
-		r := (i / SubSize) * SubSize
-		c := (i % SubSize) * SubSize
-		subgrid := []byte{}
-		for j := 0; j < SubSize; j++ {
-			for k := 0; k < SubSize; k++ {
-				subgrid = append(subgrid, puz[r+j][c+k])
-			}
-		}
-		dup := findDuplicate(subgrid)
+		dup := findDuplicate(puz.SubGrid(i))
 		if dup != 0 {
-			return fmt.Errorf("invalid puzzle: duplicate %v in subgrid of R%vC%v", dup, r+1, c+1)
+			return fmt.Errorf("invalid puzzle: duplicate %v in subgrid %v", dup, i+1)
 		}
 	}
 	return nil
