@@ -7,6 +7,10 @@ import (
 
 // Size is the number of rows and columns of a sudoku puzzle.
 const Size = 9
+// SubSize is the number of rows and columns of a sudoku subgrid.
+const SubSize = 3
+// Unknown is the glyph that indicates a masked or unknown value.
+const Unknown byte = ' '
 
 // Puzzle represents a 9×9 sudoku grid.
 type Puzzle [Size][Size]byte
@@ -43,7 +47,7 @@ func (puz *Puzzle) Read(input []byte) error {
 			glyph := line[j*2]
 			if glyph == '_' {
 				// Masked value, set cell to space for "unknown".
-				puz[i][j] = ' '
+				puz[i][j] = Unknown
 			} else if glyph >= '1' && glyph <= '9' {
 				// Known value.
 				puz[i][j] = glyph
@@ -55,10 +59,61 @@ func (puz *Puzzle) Read(input []byte) error {
 	return nil
 }
 
+// findDuplicate searches the argument for duplicate glyphs, and returns the
+// first glyph which occurs more than once.  It returns the null byte 0x00 if
+// no duplicates exist.  Duplicates of the Unknown byte are disregarded.
+func findDuplicate(input []byte) byte {
+	// Use an empty struct mapping as a poor man's "set" type.
+	var seen map[byte]struct{} = make(map[byte]struct{})
+	for _, ch := range input {
+		if ch == Unknown {
+			continue
+		}
+		if _, ok := seen[ch]; ok {
+			return ch
+		}
+		seen[ch] = struct{}{}
+	}
+	return 0
+}
+
 // Validate a puzzle for correctness.
 //
 // A puzzle is incorrect if it contains the same glyph more than once on any
 // line, any column, or in any of the nine 3×3 subgrids.
 func (puz *Puzzle) Validate() error {
+	// Rows
+	for i, row := range puz {
+		dup := findDuplicate(row[:])
+		if dup != 0 {
+			return fmt.Errorf("invalid puzzle: duplicate %v in row %v", dup, i+1)
+		}
+	}
+	// Columns
+	for i := 0; i < Size; i++ {
+		var col [Size]byte
+		for j := 0; j < Size; j++ {
+			col[j] = puz[j][i]
+		}
+		dup := findDuplicate(col[:])
+		if dup != 0 {
+			return fmt.Errorf("invalid puzzle: duplicate %v in col %v", dup, i+1)
+		}
+	}
+	// Subgrids
+	for i := 0; i < Size; i++ {
+		r := (i / SubSize) * SubSize
+		c := (i % SubSize) * SubSize
+		subgrid := []byte{}
+		for j := 0; j < SubSize; j++ {
+			for k := 0; k < SubSize; k++ {
+				subgrid = append(subgrid, puz[r+j][c+k])
+			}
+		}
+		dup := findDuplicate(subgrid)
+		if dup != 0 {
+			return fmt.Errorf("invalid puzzle: duplicate %v in subgrid of R%vC%v", dup, r+1, c+1)
+		}
+	}
 	return nil
 }
