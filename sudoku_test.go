@@ -183,6 +183,27 @@ func TestPuzzleSubGrid(t *testing.T) {
 	}
 }
 
+func TestFindDuplicate(t *testing.T) {
+	tests := [][]byte{
+		{'1', ' ', '3', ' ', ' ', '6', ' ', '8', ' '},
+		{'1', ' ', '3', ' ', ' ', '6', ' ', '8', '1'},
+		{' ', '5', ' ', ' ', '8', ' ', '1', '2', ' '},
+		{' ', '5', ' ', ' ', '8', ' ', '1', '2', '2'},
+		{'8', '5', ' ', ' ', '8', ' ', '1', '2', '2'}}
+	expect := []byte{
+		0,
+		'1',
+		0,
+		'2',
+		'8'}
+	for i, test := range tests {
+		result := findDuplicate(test)
+		if result != expect[i] {
+			t.Errorf("incorrect findDuplicate result: expected %q, got %q", expect[i], result)
+		}
+	}
+}
+
 func TestPuzzleValidate(t *testing.T) {
 	puz := Puzzle{
 		{'1', ' ', '3', ' ', ' ', '6', ' ', '8', ' '},
