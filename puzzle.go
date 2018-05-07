@@ -14,6 +14,9 @@ const SubSize = 3
 // Unknown is the glyph that indicates a masked or unknown value.
 const Unknown byte = ' '
 
+// Glyphs contains all of the valid known glyphs.
+var Glyphs = [Size]byte{'1', '2', '3', '4', '5', '6', '7', '8', '9'}
+
 // Puzzle represents a 9×9 sudoku grid.
 type Puzzle [Size][Size]byte
 
@@ -125,6 +128,20 @@ func (a *Puzzle) Equal(b Puzzle) bool {
 		}
 	}
 	return true
+}
+
+// NumUnknowns returns the number of unknown cells in the puzzle.
+//
+// Null bytes count as unknown for this method.
+func (puz *Puzzle) NumUnknowns() (count int) {
+	for i := 0; i < Size; i++ {
+		for j := 0; j < Size; j++ {
+			if puz[i][j] == Unknown || puz[i][j] == 0 {
+				count++
+			}
+		}
+	}
+	return
 }
 
 // Merge copies bytes from 'source' into 'dest'. 
