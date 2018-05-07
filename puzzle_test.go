@@ -214,15 +214,15 @@ func TestPuzzleEqual(t *testing.T) {
 		{' ', '4', ' ', ' ', '7', '8', ' ', '1', ' '},
 		{'6', ' ', '8', ' ', ' ', '2', ' ', '4', ' '},
 		{' ', '1', '2', ' ', '4', '5', ' ', '7', '8'}}
-    if a.Equal(b) {
-        t.Errorf("incorrect result from Equal: %v is not equal to %v", a, b)
-    }
-    if b.Equal(c) {
-        t.Errorf("incorrect result from Equal: %v is not equal to %v", a, b)
-    }
-    if !a.Equal(c) {
-        t.Errorf("incorrect result from Equal: %v is equal to %v", a, c)
-    }
+	if a.Equal(b) {
+		t.Errorf("incorrect result from Equal: %v is not equal to %v", a, b)
+	}
+	if b.Equal(c) {
+		t.Errorf("incorrect result from Equal: %v is not equal to %v", a, b)
+	}
+	if !a.Equal(c) {
+		t.Errorf("incorrect result from Equal: %v is equal to %v", a, c)
+	}
 }
 
 func TestPuzzleNumUnknowns(t *testing.T) {
@@ -241,7 +241,7 @@ func TestPuzzleNumUnknowns(t *testing.T) {
 	if result != expect {
 		t.Errorf("incorrect return from NumUnknown: expected %v, got %v", expect, result)
 	}
-	
+
 	puz = Puzzle{
 		{' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '},
 		{' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '},
@@ -287,15 +287,15 @@ func TestPuzzleMerge(t *testing.T) {
 		{'6', ' ', '8', ' ', ' ', '2', ' ', '4', ' '},
 		{' ', '1', '2', ' ', '4', '5', ' ', '7', '8'}}
 	b := Puzzle{
-		{  0, '2',   0,   0,   0,   0,   0,   0,   0},
-		{  0,   0,   0,   0,   0,   0,   0,   0,   0},
-		{  0, '8',   0,   0,   0,   0,   0,   0,   0},
-		{  0,   0,   0,   0,   0,   0,   0,   0,   0},
-		{  0,   0,   0,   0,   0,   0,   0,   0,   0},
-		{  0,   0,   0,   0,   0,   0,   0, '6',   0},
-		{  0,   0,   0,   0,   0,   0,   0,   0,   0},
-		{  0,   0,   0,   0,   0,   0,   0,   0,   0},
-		{  0,   0,   0,   0,   0,   0,   0,   0,   0}}
+		{  0, '2',	 0,   0,   0,	0,	 0,   0,   0},
+		{  0,	0,	 0,   0,   0,	0,	 0,   0,   0},
+		{  0, '8',	 0,   0,   0,	0,	 0,   0,   0},
+		{  0,	0,	 0,   0,   0,	0,	 0,   0,   0},
+		{  0,	0,	 0,   0,   0,	0,	 0,   0,   0},
+		{  0,	0,	 0,   0,   0,	0,	 0, '6',   0},
+		{  0,	0,	 0,   0,   0,	0,	 0,   0,   0},
+		{  0,	0,	 0,   0,   0,	0,	 0,   0,   0},
+		{  0,	0,	 0,   0,   0,	0,	 0,   0,   0}}
 	expect := Puzzle{
 		{'1', '2', '3', ' ', ' ', '6', ' ', '8', ' '},
 		{' ', '5', ' ', ' ', '8', ' ', '1', '2', ' '},
@@ -306,10 +306,10 @@ func TestPuzzleMerge(t *testing.T) {
 		{' ', '4', ' ', ' ', '7', '8', ' ', '1', ' '},
 		{'6', ' ', '8', ' ', ' ', '2', ' ', '4', ' '},
 		{' ', '1', '2', ' ', '4', '5', ' ', '7', '8'}}
-    a.Merge(b)
-    if !a.Equal(expect) {
-        t.Errorf("incorrect result from merge: expected %v, got %v", expect, a)
-    }
+	a.Merge(b)
+	if !a.Equal(expect) {
+		t.Errorf("incorrect result from merge: expected %v, got %v", expect, a)
+	}
 }
 
 func TestFindDuplicate(t *testing.T) {

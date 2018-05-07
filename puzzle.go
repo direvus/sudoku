@@ -144,7 +144,7 @@ func (puz *Puzzle) NumUnknowns() (count int) {
 	return
 }
 
-// Merge copies bytes from 'source' into 'dest'. 
+// Merge copies bytes from 'source' into 'dest'.
 //
 // Null (0x00) bytes in the source are disregarded.
 func (dest *Puzzle) Merge(source Puzzle) {

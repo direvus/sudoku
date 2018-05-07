@@ -33,8 +33,8 @@ func (puz *Puzzle) Candidates(r, c int) (result []byte) {
 	// Eliminate glyphs in same subgrid.
 	sr := (r / SubSize) * SubSize
 	sc := (c / SubSize) * SubSize
-	for i := sr; i < sr + SubSize; i++ {
-		for j := sc; j < sc + SubSize; j++ {
+	for i := sr; i < sr+SubSize; i++ {
+		for j := sc; j < sc+SubSize; j++ {
 			if i != r || j != c {
 				glyph := puz[i][j]
 				if glyph != Unknown && glyph != 0 {
