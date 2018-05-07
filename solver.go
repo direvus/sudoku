@@ -59,7 +59,6 @@ func (puz *Puzzle) Candidates(r, c int) (result []byte) {
 //
 // Return the number of unknown cells remaining.
 func (puz *Puzzle) SolveSolos() (remain int) {
-	/*
 	remain = puz.NumUnknowns()
 	for {
 		if remain == 0 {
@@ -68,9 +67,21 @@ func (puz *Puzzle) SolveSolos() (remain int) {
 		curr := remain
 		for i := 0; i < Size; i++ {
 			for j := 0; j < Size; j++ {
+				if puz[i][j] != Unknown {
+					continue
+				}
+				candidates := puz.Candidates(i, j)
+				if len(candidates) == 1 {
+					// We have a winner
+					puz[i][j] = candidates[0]
+					remain--
+				}
 			}
 		}
+		if curr == remain {
+			// No progress, we've done all we can here ...
+			return
+		}
 	}
-	*/
 	return
 }

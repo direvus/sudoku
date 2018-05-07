@@ -50,7 +50,10 @@ func TestSolveSolos(t *testing.T) {
 		{'5', '1', '9', '3', '6', '2', '4', '8', '7'},
 		{'3', '7', '6', '9', '8', '4', '2', '5', '1'},
 		{'8', '2', '4', '7', '5', '1', '3', '6', '9'}}
-	puz.SolveSolos()
+	remain := puz.SolveSolos()
+	if remain != 0 {
+		t.Errorf("incorrect return from SolveSolos: expected %v unknowns remaining, got %v", 0, remain)
+	}
 	if !puz.Equal(expect) {
 		t.Errorf("puzzle not solved: expected %v, got %v", expect, puz)
 	}
