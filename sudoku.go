@@ -117,6 +117,29 @@ func (puz *Puzzle) SubGrid(index int) []byte {
 	return subgrid
 }
 
+// Equal returns whether two puzzles contain the same bytes.
+func (a *Puzzle) Equal(b Puzzle) bool {
+    for i := 0; i < Size; i++ {
+        if !bytes.Equal(a[i][:], b[i][:]) {
+            return false
+        }
+    }
+    return true
+}
+
+// Merge copies bytes from 'source' into 'dest'. 
+//
+// Null (0x00) bytes in the source are disregarded.
+func (dest *Puzzle) Merge(source Puzzle) {
+    for i := 0; i < Size; i++ {
+        for j := 0; j < Size; j++ {
+            if source[i][j] != 0 {
+                dest[i][j] = source[i][j]
+            }
+        }
+    }
+}
+
 // Validate a puzzle for correctness.
 //
 // A puzzle is incorrect if it contains the same glyph more than once on any
