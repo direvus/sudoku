@@ -52,6 +52,16 @@ func (puz *Puzzle) Candidates(r, c int) (result []byte) {
 	return
 }
 
+// SolveSolo returns the solution for a given cell, if it can be determined by
+// simple candidate elimination.  Otherwise it returns the null byte 0x00.
+func (puz *Puzzle) SolveSolo(r, c int) (result byte) {
+	candidates := puz.Candidates(r, c)
+	if len(candidates) == 1 {
+		result = candidates[0]
+	}
+	return
+}
+
 // SolveSolos solves all cells in a puzzle which can be found by simple
 // candidate elimination.  For each cell which only has one candidate glyph,
 // populate the cell with the candidate and repeat until either no unknown
@@ -70,10 +80,10 @@ func (puz *Puzzle) SolveSolos() (remain int) {
 				if puz[i][j] != Unknown {
 					continue
 				}
-				candidates := puz.Candidates(i, j)
-				if len(candidates) == 1 {
+				solve := puz.SolveSolo(i, j)
+				if solve != 0 {
 					// We have a winner
-					puz[i][j] = candidates[0]
+					puz[i][j] = solve
 					remain--
 				}
 			}
