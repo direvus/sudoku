@@ -185,3 +185,30 @@ func (puz *Puzzle) Validate() error {
 	}
 	return nil
 }
+
+// String returns a formatted representation of a puzzle.
+//
+// Rows are each terminated by a newline (0x0a), while glyphs within a row are
+// separated by one space (0x20).  Nulls and unknowns are represented by
+// underscore (0x5f).
+//
+// This format can be consumed by the Read() method.
+func (puz *Puzzle) String() string {
+	var buf bytes.Buffer
+	for i := 0; i < Size; i++ {
+		for j := 0; j < Size; j++ {
+			glyph := puz[i][j]
+			if glyph == Unknown || glyph == 0 {
+				buf.WriteByte('_')
+			} else {
+				buf.WriteByte(puz[i][j])
+			}
+			if j < Size-1 {
+				buf.WriteByte(' ')
+			} else {
+				buf.WriteByte('\n')
+			}
+		}
+	}
+	return buf.String()
+}
