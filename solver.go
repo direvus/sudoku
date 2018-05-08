@@ -52,14 +52,17 @@ func (puz *Puzzle) Candidates(r, c int) (result []byte) {
 	return
 }
 
-// SolveSolo returns the solution for a given cell, if it can be determined by
-// simple candidate elimination.  Otherwise it returns the null byte 0x00.
-func (puz *Puzzle) SolveSolo(r, c int) (result byte) {
+// SolveSolo solves a given cell, if it can be determined by simple candidate
+// elimination, and then writes to the channel to indicate whether the cell was
+// solved.
+func (puz *Puzzle) solveSolo(r, c int, ch chan bool) {
 	candidates := puz.Candidates(r, c)
 	if len(candidates) == 1 {
-		result = candidates[0]
+		puz[r][c] = candidates[0]
+		ch <- true
+	} else {
+		ch <- false
 	}
-	return
 }
 
 // SolveSolos solves all cells in a puzzle which can be found by simple
@@ -75,17 +78,18 @@ func (puz *Puzzle) SolveSolos() (remain int) {
 			return
 		}
 		curr := remain
+		ch := make(chan bool)
 		for i := 0; i < Size; i++ {
 			for j := 0; j < Size; j++ {
 				if puz[i][j] != Unknown {
 					continue
 				}
-				solve := puz.SolveSolo(i, j)
-				if solve != 0 {
-					// We have a winner
-					puz[i][j] = solve
-					remain--
-				}
+				go puz.solveSolo(i, j, ch)
+			}
+		}
+		for i := 0; i < curr; i++ {
+			if <-ch {
+				remain--
 			}
 		}
 		if curr == remain {
