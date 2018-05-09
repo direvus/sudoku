@@ -59,6 +59,32 @@ func TestSolveSolos(t *testing.T) {
 	}
 }
 
+func TestSolveRow(t *testing.T) {
+	puz := Puzzle{
+		{' ', ' ', '3', ' ', '5', ' ', '2', ' ', ' '},
+		{'2', ' ', ' ', '7', ' ', '6', ' ', ' ', '9'},
+		{'7', ' ', ' ', ' ', ' ', ' ', ' ', ' ', '4'},
+		{' ', '2', ' ', '8', ' ', '1', ' ', '6', ' '},
+		{' ', ' ', '9', '6', ' ', '2', '4', ' ', ' '},
+		{' ', '4', ' ', '3', ' ', '5', ' ', '2', ' '},
+		{'4', ' ', ' ', ' ', ' ', ' ', ' ', ' ', '8'},
+		{'3', ' ', ' ', '4', ' ', '8', ' ', ' ', '2'},
+		{' ', ' ', '5', ' ', '1', ' ', '3', ' ', ' '}}
+	ch := make(chan bool)
+	go puz.solveRow('2', 8, ch)
+	if !<-ch {
+		t.Errorf("failed to solve for 2 in row 8")
+	}
+	if puz[8][3] != '2' {
+		t.Errorf("failed to populate solution for 2 in row 8, found %q", puz[8][3])
+	}
+
+	go puz.solveRow('1', 0, ch)
+	if <-ch {
+		t.Errorf("unexpectedly solved for 1 in row 0, multiple candidate locations")
+	}
+}
+
 func BenchmarkSolveSolos(b *testing.B) {
 	puz := Puzzle{
 		{'2', ' ', ' ', '6', '3', ' ', ' ', '1', ' '},
