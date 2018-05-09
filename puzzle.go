@@ -14,11 +14,21 @@ const SubSize = 3
 // Unknown is the glyph that indicates a masked or unknown value.
 const Unknown byte = ' '
 
+// Null is the glyph that indicates an uninitialised value.
+const Null byte = 0
+
 // Glyphs contains all of the valid known glyphs.
 var Glyphs = [Size]byte{'1', '2', '3', '4', '5', '6', '7', '8', '9'}
 
 // Puzzle represents a 9×9 sudoku grid.
 type Puzzle [Size][Size]byte
+
+// Known returns whether the given glyph indicates a known value.
+//
+// That is, it is neither Unknown, nor Null.
+func Known(glyph byte) bool {
+	return glyph != Unknown && glyph != Null
+}
 
 // Read in a puzzle definition from a slice of bytes.
 //
@@ -148,7 +158,7 @@ func (a *Puzzle) Equal(b Puzzle) bool {
 func (puz *Puzzle) NumUnknowns() (count int) {
 	for i := 0; i < Size; i++ {
 		for j := 0; j < Size; j++ {
-			if puz[i][j] == Unknown || puz[i][j] == 0 {
+			if !Known(puz[i][j]) {
 				count++
 			}
 		}
@@ -210,7 +220,7 @@ func (puz *Puzzle) String() string {
 	for i := 0; i < Size; i++ {
 		for j := 0; j < Size; j++ {
 			glyph := puz[i][j]
-			if glyph == Unknown || glyph == 0 {
+			if !Known(glyph) {
 				buf.WriteByte('_')
 			} else {
 				buf.WriteByte(puz[i][j])

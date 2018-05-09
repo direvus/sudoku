@@ -5,6 +5,17 @@ import (
 	"testing"
 )
 
+func TestKnown(t *testing.T) {
+	tests := []byte{0, ' ', '1', '2', '3', '4', '5', '6', '7', '8', '9'}
+	expect := []bool{false, false, true, true, true, true, true, true, true, true, true}
+	for i, v := range tests {
+		result := Known(v)
+		if result != expect[i] {
+			t.Errorf("invalid result from Known for %v: expected %v, got %v", v, expect[i], result)
+		}
+	}
+}
+
 func TestPuzzleRead(t *testing.T) {
 	var puz Puzzle
 	var err error

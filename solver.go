@@ -16,7 +16,7 @@ func (puz *Puzzle) Candidates(r, c int) (result []byte) {
 	for i := 0; i < Size; i++ {
 		if i != c {
 			glyph := puz[r][i]
-			if glyph != Unknown && glyph != 0 {
+			if Known(glyph) {
 				candidates[glyph] = false
 			}
 		}
@@ -25,7 +25,7 @@ func (puz *Puzzle) Candidates(r, c int) (result []byte) {
 	for i := 0; i < Size; i++ {
 		if i != r {
 			glyph := puz[i][c]
-			if glyph != Unknown && glyph != 0 {
+			if Known(glyph) {
 				candidates[glyph] = false
 			}
 		}
@@ -37,7 +37,7 @@ func (puz *Puzzle) Candidates(r, c int) (result []byte) {
 		for j := sc; j < sc+SubSize; j++ {
 			if i != r || j != c {
 				glyph := puz[i][j]
-				if glyph != Unknown && glyph != 0 {
+				if Known(glyph) {
 					candidates[glyph] = false
 				}
 			}
