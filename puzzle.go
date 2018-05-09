@@ -100,6 +100,18 @@ func (puz *Puzzle) Column(index int) []byte {
 	return col[:]
 }
 
+// CellSubGrid returns the index of the subgrid that the given cell is in.
+//
+// Subgrids are indexed in left to right, top to bottom order, beginning with
+// zero:
+//
+// 0 1 2
+// 3 4 5
+// 6 7 8
+func CellSubGrid(r, c int) int {
+	return ((r / 3) * 3) + (c / 3)
+}
+
 // SubGrid returns one subgrid from a puzzle as a slice of bytes.
 //
 // Subgrids are indexed in left to right, top to bottom order, beginning with

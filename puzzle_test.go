@@ -150,6 +150,27 @@ func TestPuzzleColumn(t *testing.T) {
 	}
 }
 
+func TestCellSubGrid(t *testing.T) {
+	expect := [Size][Size]int{
+		{0, 0, 0, 1, 1, 1, 2, 2, 2},
+		{0, 0, 0, 1, 1, 1, 2, 2, 2},
+		{0, 0, 0, 1, 1, 1, 2, 2, 2},
+		{3, 3, 3, 4, 4, 4, 5, 5, 5},
+		{3, 3, 3, 4, 4, 4, 5, 5, 5},
+		{3, 3, 3, 4, 4, 4, 5, 5, 5},
+		{6, 6, 6, 7, 7, 7, 8, 8, 8},
+		{6, 6, 6, 7, 7, 7, 8, 8, 8},
+		{6, 6, 6, 7, 7, 7, 8, 8, 8}}
+	for i := 0; i < Size; i++ {
+		for j := 0; j < Size; j++ {
+			result := CellSubGrid(i, j)
+			if result != expect[i][j] {
+				t.Errorf("invalid return from CellSubGrid for R%vC%v, expected %v, got %v", i, j, expect[i][j], result)
+			}
+		}
+	}
+}
+
 func TestPuzzleSubGrid(t *testing.T) {
 	puz := Puzzle{
 		{'1', ' ', '3', ' ', ' ', '6', ' ', '8', ' '},
