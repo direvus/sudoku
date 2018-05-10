@@ -309,14 +309,16 @@ func (puz *Puzzle) solveSubGrid(glyph byte, subgrid int, ch chan bool) {
 	ch <- false
 }
 
-// SolveSolos solves all cells in a puzzle which can be found by simple
-// candidate elimination.  For each cell which only has one candidate glyph, or
-// zone with only one candidate location for a glyph, populate the cell with
-// the candidate and repeat until either no unknown cells remain, or all
-// remaining unknown cells have multiple candidates.
+// SolveEasy solves all cells in a puzzle which can be found by candidate or
+// location elimination (these techniques should be sufficient to solve most "Easy" sudokus).
+//
+// For each cell which only has one candidate glyph, or zone with only one
+// candidate location for a glyph, populate the cell with the candidate and
+// repeat until either no unknown cells remain, or all remaining unknown cells
+// have multiple candidates.
 //
 // Return the number of unknown cells remaining.
-func (puz *Puzzle) SolveSolos() (remain int) {
+func (puz *Puzzle) SolveEasy() (remain int) {
 	remain = puz.NumUnknowns()
 	for {
 		if remain == 0 {
@@ -333,6 +335,18 @@ func (puz *Puzzle) SolveSolos() (remain int) {
 			}
 		}
 		for i := 0; i < curr; i++ {
+			if <-ch {
+				remain--
+			}
+		}
+		for i := 0; i < Size; i++ {
+			for _, glyph := range Glyphs {
+				go puz.solveRow(glyph, i, ch)
+				go puz.solveColumn(glyph, i, ch)
+				go puz.solveSubGrid(glyph, i, ch)
+			}
+		}
+		for i := 0; i < Size * len(Glyphs) * 3; i++ {
 			if <-ch {
 				remain--
 			}
