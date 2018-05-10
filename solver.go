@@ -360,3 +360,15 @@ func (puz *Puzzle) SolveEasy() (remain int) {
 	}
 	return
 }
+
+// Solve attempts to solve a sudoku puzzle.
+//
+// It uses a combination of logical elimination and outright guesswork,
+// continuing until either all cells have been solved, or no further progress
+// can be made.
+//
+// Returns the number of cells that remain unsolved.
+func (puz *Puzzle) Solve() (remain int) {
+	remain = puz.SolveEasy()
+	return
+}

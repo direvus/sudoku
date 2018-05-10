@@ -133,7 +133,7 @@ func TestSolveEasy(t *testing.T) {
 		t.Errorf("incorrect return from SolveEasy: expected %v unknowns remaining, got %v", 0, remain)
 	}
 	if !puz.Equal(expect) {
-		t.Errorf("puzzle not solved: expected %v, got %v", expect, puz)
+		t.Errorf("puzzle not solved: expected:\n%v\n\ngot:\n%v", expect.String(), puz.String())
 	}
 
 	puz = Puzzle{
@@ -149,6 +149,64 @@ func TestSolveEasy(t *testing.T) {
 	remain = puz.SolveEasy()
 	if remain > 29 {
 		t.Errorf("inadequate return from SolveEasy: expected at most 29 unsolved cells, got %v", remain)
+	}
+}
+
+func TestSolve(t *testing.T) {
+	puz := Puzzle{
+		{'2', ' ', ' ', '6', '3', ' ', ' ', '1', ' '},
+		{' ', '5', '1', ' ', '2', ' ', '7', '9', '3'},
+		{'4', ' ', '3', '1', '9', '7', '5', ' ', ' '},
+		{' ', ' ', ' ', ' ', ' ', '9', ' ', '3', '2'},
+		{' ', '6', '5', ' ', '7', ' ', '1', '4', ' '},
+		{'1', '3', ' ', '8', ' ', ' ', ' ', ' ', ' '},
+		{' ', ' ', '9', '3', '6', '2', '4', ' ', '7'},
+		{'3', '7', '6', ' ', '8', ' ', '2', '5', ' '},
+		{' ', '2', ' ', ' ', '5', '1', ' ', ' ', '9'}}
+	expect := Puzzle{
+		{'2', '9', '7', '6', '3', '5', '8', '1', '4'},
+		{'6', '5', '1', '4', '2', '8', '7', '9', '3'},
+		{'4', '8', '3', '1', '9', '7', '5', '2', '6'},
+		{'7', '4', '8', '5', '1', '9', '6', '3', '2'},
+		{'9', '6', '5', '2', '7', '3', '1', '4', '8'},
+		{'1', '3', '2', '8', '4', '6', '9', '7', '5'},
+		{'5', '1', '9', '3', '6', '2', '4', '8', '7'},
+		{'3', '7', '6', '9', '8', '4', '2', '5', '1'},
+		{'8', '2', '4', '7', '5', '1', '3', '6', '9'}}
+	remain := puz.Solve()
+	if remain != 0 {
+		t.Errorf("incorrect return from Solve: expected %v unknowns remaining, got %v", 0, remain)
+	}
+	if !puz.Equal(expect) {
+		t.Errorf("puzzle not solved: expected:\n%v\n\ngot:\n%v", expect.String(), puz.String())
+	}
+
+	puz = Puzzle{
+		{' ', ' ', '3', ' ', '5', ' ', '2', ' ', ' '},
+		{'2', ' ', ' ', '7', ' ', '6', ' ', ' ', '9'},
+		{'7', ' ', ' ', ' ', ' ', ' ', ' ', ' ', '4'},
+		{' ', '2', ' ', '8', ' ', '1', ' ', '6', ' '},
+		{' ', ' ', '9', '6', ' ', '2', '4', ' ', ' '},
+		{' ', '4', ' ', '3', ' ', '5', ' ', '2', ' '},
+		{'4', ' ', ' ', ' ', ' ', ' ', ' ', ' ', '8'},
+		{'3', ' ', ' ', '4', ' ', '8', ' ', ' ', '2'},
+		{' ', ' ', '5', ' ', '1', ' ', '3', ' ', ' '}}
+	expect = Puzzle{
+		{'9', '8', '3', '1', '5', '4', '2', '7', '6'},
+		{'2', '5', '4', '7', '8', '6', '1', '3', '9'},
+		{'7', '1', '6', '9', '2', '3', '8', '5', '4'},
+		{'5', '2', '7', '8', '4', '1', '9', '6', '3'},
+		{'1', '3', '9', '6', '7', '2', '4', '8', '5'},
+		{'6', '4', '8', '3', '9', '5', '7', '2', '1'},
+		{'4', '9', '2', '5', '3', '7', '6', '1', '8'},
+		{'3', '7', '1', '4', '6', '8', '5', '9', '2'},
+		{'8', '6', '5', '2', '1', '9', '3', '4', '7'}}
+	remain = puz.Solve()
+	if remain != 0 {
+		t.Errorf("incorrect return from Solve: expected %v unknowns remaining, got %v", 0, remain)
+	}
+	if !puz.Equal(expect) {
+		t.Errorf("puzzle not solved: expected:\n%v\n\ngot:\n%v", expect.String(), puz.String())
 	}
 }
 
