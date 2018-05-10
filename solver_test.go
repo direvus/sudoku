@@ -73,15 +73,15 @@ func TestSolveRow(t *testing.T) {
 	ch := make(chan bool)
 	go puz.solveRow('2', 8, ch)
 	if !<-ch {
-		t.Errorf("failed to solve for 2 in row 8")
+		t.Errorf("failed to solve for 2 in R8")
 	}
 	if puz[8][3] != '2' {
-		t.Errorf("failed to populate solution for 2 in row 8, found %q", puz[8][3])
+		t.Errorf("failed to populate solution for 2 in R9, found %q", puz[8][3])
 	}
 
 	go puz.solveRow('1', 0, ch)
 	if <-ch {
-		t.Errorf("unexpectedly solved for 1 in row 0, multiple candidate locations")
+		t.Errorf("unexpectedly solved for 1 in R1, multiple candidate locations")
 	}
 }
 
@@ -99,15 +99,41 @@ func TestSolveColumn(t *testing.T) {
 	ch := make(chan bool)
 	go puz.solveColumn('5', 3, ch)
 	if !<-ch {
-		t.Errorf("failed to solve for 5 in column 3")
+		t.Errorf("failed to solve for 5 in C4")
 	}
 	if puz[6][3] != '5' {
-		t.Errorf("failed to populate solution for 5 in column 3, found %q", puz[6][3])
+		t.Errorf("failed to populate solution for 5 in C4, found %q", puz[6][3])
 	}
 
 	go puz.solveColumn('1', 0, ch)
 	if <-ch {
-		t.Errorf("unexpectedly solved for 1 in column 0, multiple candidate locations")
+		t.Errorf("unexpectedly solved for 1 in C1, multiple candidate locations")
+	}
+}
+
+func TestSolveSubGrid(t *testing.T) {
+	puz := Puzzle{
+		{' ', ' ', '3', ' ', '5', ' ', '2', ' ', ' '},
+		{'2', ' ', ' ', '7', ' ', '6', ' ', ' ', '9'},
+		{'7', ' ', ' ', ' ', ' ', ' ', ' ', ' ', '4'},
+		{' ', '2', ' ', '8', ' ', '1', ' ', '6', ' '},
+		{' ', ' ', '9', '6', ' ', '2', '4', ' ', ' '},
+		{' ', '4', ' ', '3', ' ', '5', ' ', '2', ' '},
+		{'4', ' ', ' ', ' ', ' ', ' ', ' ', ' ', '8'},
+		{'3', ' ', ' ', '4', ' ', '8', ' ', ' ', '2'},
+		{' ', ' ', '5', ' ', '1', ' ', '3', ' ', ' '}}
+	ch := make(chan bool)
+	go puz.solveSubGrid('4', 8, ch)
+	if !<-ch {
+		t.Errorf("failed to solve for 4 in subgrid 9")
+	}
+	if puz[8][7] != '4' {
+		t.Errorf("failed to populate solution for 4 in R9C8, found %q", puz[8][7])
+	}
+
+	go puz.solveSubGrid('1', 0, ch)
+	if <-ch {
+		t.Errorf("unexpectedly solved for 1 in subgrid 0, multiple candidate locations")
 	}
 }
 

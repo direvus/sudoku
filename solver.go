@@ -239,6 +239,76 @@ func (puz *Puzzle) solveColumn(glyph byte, c int, ch chan bool) {
 	ch <- false
 }
 
+// solveSubGrid finds the location of a glyph within a given subgrid, if all
+// other candidate locations for the glyph within the subgrid are invalid.  If
+// the location of the glyph is found, it is populated in the puzzle.
+//
+// The channel receives a boolean to indicate whether the glyph was found.
+func (puz *Puzzle) solveSubGrid(glyph byte, subgrid int, ch chan bool) {
+	sr := (subgrid / SubSize) * SubSize
+	sc := (subgrid % SubSize) * SubSize
+	locs := [SubSize][SubSize]bool{
+		{true, true, true},
+		{true, true, true},
+		{true, true, true}}
+	num := SubSize * SubSize
+
+	for i := 0; i < SubSize; i++ {
+		for j := 0; j < SubSize; j++ {
+			r := sr + i
+			c := sc + j
+			if puz[r][c] == glyph {
+				// Glyph is already present in this subgrid, quit.
+				ch <- false
+				return
+			}
+			if !locs[i][j] {
+				// Location has already been eliminated.
+				continue
+			}
+			if Known(puz[r][c]) {
+				locs[i][j] = false
+				num--
+				continue
+			}
+			// Candidate location.  Search the row for the glyph to see whether
+			// it can be ruled out.
+			if puz.glyphInRow(glyph, r, c) {
+				for k := 0; k < SubSize; k++ {
+					if locs[i][k] {
+						locs[i][k] = false
+						num--
+					}
+				}
+				continue
+			}
+			// Search the column for the glyph to see whether it can be ruled
+			// out.
+			if puz.glyphInColumn(glyph, c, r) {
+				for k := 0; k < SubSize; k++ {
+					if locs[k][j] {
+						locs[k][j] = false
+						num--
+					}
+				}
+			}
+		}
+	}
+
+	if num == 1 {
+		for i := 0; i < Size; i++ {
+			for j := 0; j < SubSize; j++ {
+				if locs[i][j] {
+					puz[sr+i][sc+j] = glyph
+					ch <- true
+					return
+				}
+			}
+		}
+	}
+	ch <- false
+}
+
 // SolveSolos solves all cells in a puzzle which can be found by simple
 // candidate elimination.  For each cell which only has one candidate glyph, or
 // zone with only one candidate location for a glyph, populate the cell with
