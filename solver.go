@@ -310,7 +310,8 @@ func (puz *Puzzle) solveSubGrid(glyph byte, subgrid int, ch chan bool) {
 }
 
 // SolveEasy solves all cells in a puzzle which can be found by candidate or
-// location elimination (these techniques should be sufficient to solve most "Easy" sudokus).
+// location elimination (these techniques should be sufficient to solve most
+// "Easy" sudokus).
 //
 // For each cell which only has one candidate glyph, or zone with only one
 // candidate location for a glyph, populate the cell with the candidate and
@@ -346,7 +347,8 @@ func (puz *Puzzle) SolveEasy() (remain int) {
 				go puz.solveSubGrid(glyph, i, ch)
 			}
 		}
-		for i := 0; i < Size * len(Glyphs) * 3; i++ {
+		count := Size * len(Glyphs) * 3
+		for i := 0; i < count; i++ {
 			if <-ch {
 				remain--
 			}
