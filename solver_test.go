@@ -153,6 +153,7 @@ func TestSolveEasy(t *testing.T) {
 }
 
 func TestSolve(t *testing.T) {
+	// “Easy” difficulty
 	puz := Puzzle{
 		{'2', ' ', ' ', '6', '3', ' ', ' ', '1', ' '},
 		{' ', '5', '1', ' ', '2', ' ', '7', '9', '3'},
@@ -181,6 +182,7 @@ func TestSolve(t *testing.T) {
 		t.Errorf("puzzle not solved: expected:\n%v\n\ngot:\n%v", expect.String(), puz.String())
 	}
 
+	// “Tricky” difficulty
 	puz = Puzzle{
 		{' ', ' ', '3', ' ', '5', ' ', '2', ' ', ' '},
 		{'2', ' ', ' ', '7', ' ', '6', ' ', ' ', '9'},
@@ -201,6 +203,25 @@ func TestSolve(t *testing.T) {
 		{'4', '9', '2', '5', '3', '7', '6', '1', '8'},
 		{'3', '7', '1', '4', '6', '8', '5', '9', '2'},
 		{'8', '6', '5', '2', '1', '9', '3', '4', '7'}}
+	remain = puz.Solve()
+	if remain != 0 {
+		t.Errorf("incorrect return from Solve: expected %v unknowns remaining, got %v", 0, remain)
+	}
+	if !puz.Equal(expect) {
+		t.Errorf("puzzle not solved: expected:\n%v\n\ngot:\n%v", expect.String(), puz.String())
+	}
+
+	// “Extreme” difficulty
+	puz = Puzzle{
+		{' ', ' ', '8', ' ', ' ', '6', '2', '5', ' '},
+		{' ', ' ', ' ', ' ', '7', ' ', ' ', '3', ' '},
+		{' ', ' ', ' ', ' ', '1', '2', '9', '8', ' '},
+		{' ', ' ', '5', ' ', ' ', '3', ' ', ' ', ' '},
+		{' ', '2', ' ', '7', ' ', '1', ' ', '6', ' '},
+		{' ', ' ', ' ', '8', ' ', ' ', '1', ' ', ' '},
+		{' ', '3', '6', '2', '8', ' ', ' ', ' ', ' '},
+		{' ', '7', ' ', ' ', '9', ' ', ' ', ' ', ' '},
+		{' ', '8', '2', '1', ' ', ' ', '4', ' ', ' '}}
 	remain = puz.Solve()
 	if remain != 0 {
 		t.Errorf("incorrect return from Solve: expected %v unknowns remaining, got %v", 0, remain)
