@@ -1,4 +1,4 @@
-Sudoku
+Sudoku - すどく
 ======
 
 https://github.com/direvus/sudoku
