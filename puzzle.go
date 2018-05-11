@@ -166,6 +166,25 @@ func (puz *Puzzle) NumUnknowns() (count int) {
 	return
 }
 
+// NextUnknown returns the location of the next unknown cell.
+//
+// The search is performed in top-down, left-right order, and retuns the
+// location of the first unknown cell found.
+//
+// If no unknown cells exist, 'found' will be returned as false.
+func (puz *Puzzle) NextUnknown(r, c int) (row, column int, found bool) {
+	for row = r; row < Size; row++ {
+		for column = c; column < Size; column++ {
+			if !Known(puz[row][column]) {
+				found = true
+				return
+			}
+		}
+		c = 0
+	}
+	return
+}
+
 // Merge copies bytes from 'source' into 'dest'.
 //
 // Null (0x00) bytes in the source are disregarded.

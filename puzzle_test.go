@@ -307,6 +307,43 @@ func TestPuzzleNumUnknowns(t *testing.T) {
 	}
 }
 
+func TestPuzzleNextUnknown(t *testing.T) {
+	puz := Puzzle{
+		{'1', ' ', '3', ' ', ' ', '6', ' ', '8', ' '},
+		{' ', '5', ' ', ' ', '8', ' ', '1', '2', ' '},
+		{'7', ' ', '9', '1', ' ', '3', ' ', '5', '6'},
+		{' ', '3', ' ', ' ', '6', '7', ' ', '9', ' '},
+		{'5', ' ', '7', '8', ' ', ' ', ' ', '3', ' '},
+		{'8', ' ', '1', ' ', '3', ' ', '5', ' ', '7'},
+		{' ', '4', ' ', ' ', '7', '8', ' ', '1', ' '},
+		{'6', ' ', '8', ' ', ' ', '2', ' ', '4', ' '},
+		{' ', '1', '2', ' ', '4', '5', ' ', '7', '8'}}
+	r, c, found := puz.NextUnknown(0, 0)
+	if r != 0 || c != 1 || !found {
+		t.Errorf("incorrect return from NextUnknown: expected R1C2, got R%vC%v", r+1, c+1)
+	}
+
+	r, c, found = puz.NextUnknown(5, 8)
+	if r != 6 || c != 0 || !found {
+		t.Errorf("incorrect return from NextUnknown: expected R7C1, got R%vC%v", r+1, c+1)
+	}
+
+	puz = Puzzle{
+		{'1', '2', '3', '4', '5', '6', '7', '8', '9'},
+		{'4', '5', '6', '7', '8', '9', '1', '2', '3'},
+		{'7', '8', '9', '1', '2', '3', '4', '5', '6'},
+		{'2', '3', '4', '5', '6', '7', '8', '9', '1'},
+		{'5', '6', '7', '8', '9', '1', '2', '3', '4'},
+		{'8', '9', '1', '2', '3', '4', '5', '6', '7'},
+		{'3', '4', '5', '6', '7', '8', '9', '1', '2'},
+		{'6', '7', '8', '9', '1', '2', '3', '4', '5'},
+		{'9', '1', '2', '3', '4', '5', '6', '7', '8'}}
+	r, c, found = puz.NextUnknown(0, 0)
+	if found {
+		t.Errorf("incorrect return from NumUnknown: expected none, got R%vC%v", r+1, c+1)
+	}
+}
+
 func TestPuzzleMerge(t *testing.T) {
 	a := Puzzle{
 		{'1', ' ', '3', ' ', ' ', '6', ' ', '8', ' '},
