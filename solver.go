@@ -361,6 +361,47 @@ func (puz *Puzzle) SolveEasy() (remain int) {
 	return
 }
 
+// Guess attempts to solve a puzzle by brute force guesswork.
+//
+// Starting with the given cell, guess tries each glyph in turn and, if it does
+// not violate any constraints, recurses on to the next unknown cell and
+// repeats the process.
+//
+// The channel receives true if the cell and all subsequent cells have a
+// satisfactory solution, false otherwise.
+//
+// Eventually, either all cells will be solved, or no solution can be
+// discovered.
+func (puz *Puzzle) guess(r, c int, ch chan bool) {
+	subgrid := CellSubGrid(r, c)
+	for _, glyph := range Glyphs {
+		if (puz.glyphInRow(glyph, r, c) ||
+				puz.glyphInColumn(glyph, c, r) ||
+				puz.glyphInSubGrid(glyph, subgrid, r, c)) {
+			continue
+		}
+		puz[r][c] = glyph
+		if puz.Validate() == nil {
+			nr, nc, found := puz.NextUnknown(r, c)
+			if found {
+				// So far so good, recurse to the next cell.
+				nch := make(chan bool)
+				go puz.guess(nr, nc, nch)
+				if <-nch {
+					ch <- true
+					return
+				}
+			} else {
+				ch <- true
+				return
+			}
+		}
+	}
+	// No solution found
+	puz[r][c] = Unknown
+	ch <- false
+}
+
 // Solve attempts to solve a sudoku puzzle.
 //
 // It uses a combination of logical elimination and outright guesswork,
@@ -369,6 +410,15 @@ func (puz *Puzzle) SolveEasy() (remain int) {
 //
 // Returns the number of cells that remain unsolved.
 func (puz *Puzzle) Solve() (remain int) {
-	remain = puz.SolveEasy()
-	return
+	puz.SolveEasy()
+	ch := make(chan bool)
+	for i := 0; i < Size; i++ {
+		for j := 0; j < Size; j++ {
+			if !Known(puz[i][j]) {
+				go puz.guess(i, j, ch)
+				<-ch
+			}
+		}
+	}
+	return puz.NumUnknowns()
 }
