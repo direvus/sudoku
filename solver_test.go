@@ -240,6 +240,35 @@ func TestSolve(t *testing.T) {
 	if !puz.Equal(expect) {
 		t.Errorf("puzzle not solved: expected:\n%v\n\ngot:\n%v", expect.String(), puz.String())
 	}
+
+	// “AI Etana”, by Arto Inkala
+	puz = Puzzle{
+		{'1', ' ', ' ', ' ', ' ', '7', ' ', '9', ' '},
+		{' ', '3', ' ', ' ', '2', ' ', ' ', ' ', '8'},
+		{' ', ' ', '9', '6', ' ', ' ', '5', ' ', ' '},
+		{' ', ' ', '5', '3', ' ', ' ', '9', ' ', ' '},
+		{' ', '1', ' ', ' ', '8', ' ', ' ', ' ', '2'},
+		{'6', ' ', ' ', ' ', ' ', '4', ' ', ' ', ' '},
+		{'3', ' ', ' ', ' ', ' ', ' ', ' ', '1', ' '},
+		{' ', '4', ' ', ' ', ' ', ' ', ' ', ' ', '7'},
+		{' ', ' ', '7', ' ', ' ', ' ', '3', ' ', ' '}}
+	expect = Puzzle{
+		{'1', '6', '2', '8', '5', '7', '4', '9', '3'},
+		{'5', '3', '4', '1', '2', '9', '6', '7', '8'},
+		{'7', '8', '9', '6', '4', '3', '5', '2', '1'},
+		{'4', '7', '5', '3', '1', '2', '9', '8', '6'},
+		{'9', '1', '3', '5', '8', '6', '7', '4', '2'},
+		{'6', '2', '8', '7', '9', '4', '1', '3', '5'},
+		{'3', '5', '6', '4', '7', '8', '2', '1', '9'},
+		{'2', '4', '1', '9', '3', '5', '8', '6', '7'},
+		{'8', '9', '7', '2', '6', '1', '3', '5', '4'}}
+	remain = puz.Solve()
+	if remain != 0 {
+		t.Errorf("incorrect return from Solve: expected %v unknowns remaining, got %v", 0, remain)
+	}
+	if !puz.Equal(expect) {
+		t.Errorf("incorrect puzzle solution: expected:\n%v\n\ngot:\n%v", expect.String(), puz.String())
+	}
 }
 
 func BenchmarkSolveEasy(b *testing.B) {
