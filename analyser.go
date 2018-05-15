@@ -19,7 +19,6 @@ func (puz *Puzzle) guessCount(r, c int, ch chan int) {
 				puz.glyphInSubGrid(glyph, subgrid, r, c)) {
 			continue
 		}
-		fmt.Printf("trying %q in R%vC%v ...\n", glyph, r+1, c+1)
 		puz[r][c] = glyph
 		if puz.Validate() == nil {
 			nr, nc, found := puz.NextUnknown(r, c)
