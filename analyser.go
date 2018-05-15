@@ -31,13 +31,13 @@ func (puz *Puzzle) guessCount(r, c int, ch chan int) {
 				count++
 			}
 			if count > 1 {
-				ch <-count
+				ch <- count
 				return
 			}
 		}
 	}
 	puz[r][c] = orig
-	ch <-count
+	ch <- count
 }
 
 // NumSolutions returns the number of solutions to a puzzle.

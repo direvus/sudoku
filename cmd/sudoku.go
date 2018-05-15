@@ -2,8 +2,8 @@ package main
 
 import (
 	"bytes"
-	"os"
 	"github.com/direvus/sudoku"
+	"os"
 )
 
 func main() {
