@@ -13,6 +13,39 @@ Andrew Gerrand's November 2015 Go Challenge
 [http://golang-challenge.org/go-challenge8/], although this library is not
 written as a submission for that challenge.
 
+Build instructions
+-------
+
+- Install go
+- Checkout source
+- Execute `make build`
+- Copy the resulting binaries wherever you like
+- Use them!
+
+
+Usage instructions
+-------
+
+The `sudoku` executable takes a sudoku puzzle on stdin, attempts to solve it,
+and produces the result on stdout.
+
+The input format is one line per row, each line terminated by a single newline
+character (0x0a).  Cells within the row are delimited by a single space
+character (0x20).  Unknown cells are indicated by the underscore character
+(0x5f).
+
+So, for example:
+
+	_ _ 8 _ _ 6 2 5 _
+	_ _ _ _ 7 _ _ 3 _
+	_ _ _ _ 1 2 9 8 _
+	_ _ 5 _ _ 3 _ _ _
+	_ 2 _ 7 _ 1 _ 6 _
+	_ _ _ 8 _ _ 1 _ _
+	_ 3 6 2 8 _ _ _ _
+	_ 7 _ _ 9 _ _ _ _
+	_ 8 2 1 _ _ 4 _ _
+
 License
 -------
 
