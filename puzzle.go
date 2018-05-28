@@ -76,18 +76,18 @@ func (puz *Puzzle) Read(input []byte) error {
 
 // findDuplicate searches the argument for duplicate glyphs, and returns the
 // first glyph which occurs more than once.  It returns the null byte 0x00 if
-// no duplicates exist.  Duplicates of the Unknown byte are disregarded.
+// no duplicates exist.  Duplicates of unknown bytes are disregarded.
 func findDuplicate(input []byte) byte {
 	// Use an empty struct mapping as a poor man's "set" type.
 	var seen map[byte]struct{} = make(map[byte]struct{})
-	for _, ch := range input {
-		if ch == Unknown {
+	for _, v := range input {
+		if !Known(v) {
 			continue
 		}
-		if _, ok := seen[ch]; ok {
-			return ch
+		if _, ok := seen[v]; ok {
+			return v
 		}
-		seen[ch] = struct{}{}
+		seen[v] = struct{}{}
 	}
 	return 0
 }

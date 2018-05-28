@@ -436,6 +436,21 @@ func TestPuzzleValidate(t *testing.T) {
 	}
 	puz[0][0] = orig
 
+	puz2 := Puzzle{
+		{  0,   0,   0,   0,   0,   0,   0,   0,   0},
+		{  0,   0,   0,   0,   0,   0,   0,   0,   0},
+		{  0,   0,   0,   0,   0,   0,   0,   0,   0},
+		{  0,   0,   0,   0,   0,   0,   0,   0,   0},
+		{  0,   0,   0,   0,   0,   0,   0,   0,   0},
+		{'3', '9', '7', '5', '6', '2', '4', '8', '1'},
+		{  0,   0,   0,   0,   0,   0,   0,   0,   0},
+		{'9', '8', '3', '6', '5', '7', '4', '1', '2'},
+		{  0,   0,   0,   0,   0,   0,   0,   0,   0}}
+	err = puz2.Validate()
+	if err == nil {
+		t.Errorf("no error for duplicate glyph in column 7")
+	}
+
 	// Duplicate value in subgrid
 	orig, puz[7][8] = puz[7][8], '1'
 	err = puz.Validate()
