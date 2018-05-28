@@ -1,8 +1,8 @@
 package sudoku
 
 import (
-	"time"
 	"math/rand"
+	"time"
 )
 
 // attemptSolution tries to randomly generate a valid sudoku solution.
