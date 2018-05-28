@@ -329,7 +329,7 @@ func (puz *Puzzle) SolveEasy() (remain int) {
 		ch := make(chan bool)
 		for i := 0; i < Size; i++ {
 			for j := 0; j < Size; j++ {
-				if puz[i][j] != Unknown {
+				if Known(puz[i][j]) {
 					continue
 				}
 				go puz.solveSolo(i, j, ch)

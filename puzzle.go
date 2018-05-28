@@ -207,21 +207,21 @@ func (puz *Puzzle) Validate() error {
 	for i := 0; i < Size; i++ {
 		dup := findDuplicate(puz.Row(i))
 		if dup != 0 {
-			return fmt.Errorf("invalid puzzle: duplicate %v in row %v", dup, i+1)
+			return fmt.Errorf("invalid puzzle: duplicate %q in row %v", dup, i+1)
 		}
 	}
 	// Columns
 	for i := 0; i < Size; i++ {
 		dup := findDuplicate(puz.Column(i))
 		if dup != 0 {
-			return fmt.Errorf("invalid puzzle: duplicate %v in col %v", dup, i+1)
+			return fmt.Errorf("invalid puzzle: duplicate %q in column %v", dup, i+1)
 		}
 	}
 	// Subgrids
 	for i := 0; i < Size; i++ {
 		dup := findDuplicate(puz.SubGrid(i))
 		if dup != 0 {
-			return fmt.Errorf("invalid puzzle: duplicate %v in subgrid %v", dup, i+1)
+			return fmt.Errorf("invalid puzzle: duplicate %q in subgrid %v", dup, i+1)
 		}
 	}
 	return nil
