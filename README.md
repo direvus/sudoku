@@ -1,4 +1,6 @@
 [![Build Status](https://travis-ci.org/direvus/sudoku.svg?branch=master)](https://travis-ci.org/direvus/sudoku)
+[![codecov](https://codecov.io/gh/direvus/sudoku/branch/master/graph/badge.svg)](https://codecov.io/gh/direvus/sudoku)
+
 
 Sudoku - すどく
 ======
