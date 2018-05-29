@@ -253,3 +253,13 @@ func (puz *Puzzle) String() string {
 	}
 	return buf.String()
 }
+
+// Clear sets all bytes of the puzzle to Null.
+func (puz *Puzzle) Clear() {
+	for i := 0; i < Size; i++ {
+		for j := 0; j < Size; j++ {
+			puz[i][j] = Null
+		}
+	}
+	return
+}
