@@ -355,9 +355,10 @@ func (puz *Puzzle) SolveEasy() (remain int) {
 		}
 		if curr == remain {
 			// No progress, we've done all we can here ...
-			return
+			break
 		}
 	}
+	remain = puz.NumUnknowns()
 	return
 }
 
