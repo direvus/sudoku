@@ -41,6 +41,26 @@ func TestSeedSolution(t *testing.T) {
 	if result != 0 {
 		t.Errorf("unexpected count from SeedSolution(): expected 0, got %v", result)
 	}
+
+	// Attempt to seed a puzzle containing a contradiction
+	puz = Puzzle{
+		{'2', '9', '7', '6', '3', '5', '8', '1', '4'},
+		{'6', '5', '1', '4', '2', '8', '7', '9', '3'},
+		{'4', '8', '3', '1', '9', '7', '5', '2', '6'},
+		{'7', '4', '8', '5', '1', '9', '6', '3', '2'},
+		{'9', '6', '5', '2', ' ', '3', '1', '7', '8'},
+		{'1', '3', '2', '8', '4', '6', '9', '4', '5'},
+		{'5', '1', '9', '3', '6', '2', '4', '8', '7'},
+		{'3', '7', '6', '9', '8', '4', '2', '5', '1'},
+		{'8', '2', '4', '7', '5', '1', '3', '6', '9'}}
+	go puz.SeedSolution(n, ch)
+	result = <-ch
+	if result != 0 {
+		t.Errorf("unexpected count from SeedSolution(): expected 0, got %v", result)
+	}
+	if Known(puz[4][4]) {
+		t.Errorf("unexpected value in R5C5 from SeedSolution(): expected unknown, got %q", puz[4][4])
+	}
 }
 
 func TestAttemptSolution(t *testing.T) {
