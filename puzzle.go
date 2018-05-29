@@ -168,10 +168,11 @@ func (puz *Puzzle) NumUnknowns() (count int) {
 
 // NextUnknown returns the location of the next unknown cell.
 //
-// The search is performed in top-down, left-right order, and retuns the
-// location of the first unknown cell found.
+// The search is performed in top-down, left-right order beginning at the given
+// location, and returns the location of the first unknown cell found.
 //
-// If no unknown cells exist, 'found' will be returned as false.
+// If no unknown cells are found in the search, 'found' will be returned as
+// false.
 func (puz *Puzzle) NextUnknown(r, c int) (row, column int, found bool) {
 	for row = r; row < Size; row++ {
 		for column = c; column < Size; column++ {
@@ -181,6 +182,42 @@ func (puz *Puzzle) NextUnknown(r, c int) (row, column int, found bool) {
 			}
 		}
 		c = 0
+	}
+	return
+}
+
+// FindUnknown returns the location of the nearest unknown cell.
+//
+// The search is performed in top-down, left-right order beginning at the given
+// location, wrapping back to R1C1 if it does not begin there, and returns the
+// location of the first unknown cell found.
+//
+// If no unknown cells are found in the search, 'found' will be returned as
+// false.
+func (puz *Puzzle) FindUnknown(r, c int) (row, column int, found bool) {
+	for row = r; row < Size; row++ {
+		for column = c; column < Size; column++ {
+			if !Known(puz[row][column]) {
+				found = true
+				return
+			}
+		}
+		c = 0
+	}
+	if r != 0 || c != 0 {
+		for row = 0; row <= r; row++ {
+			maxcol := Size
+			if row == r {
+				maxcol = c
+			}
+			for column = 0; column < maxcol; column++ {
+				if !Known(puz[row][column]) {
+					found = true
+					return
+				}
+			}
+			c = 0
+		}
 	}
 	return
 }
