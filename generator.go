@@ -87,6 +87,7 @@ func GenerateSolution() (puz Puzzle) {
 	count := make(chan int)
 	n := 27
 	for {
+		puz.Clear()
 		go puz.SeedSolution(n, count)
 		if <-count == n {
 			go puz.AttemptSolution(success)
@@ -94,7 +95,6 @@ func GenerateSolution() (puz Puzzle) {
 				break
 			}
 		}
-		puz.Clear()
 	}
 	return
 }
