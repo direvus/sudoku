@@ -17,6 +17,10 @@ format:
 	${GOFMT} -d .
 
 
+cover:
+	${GO} test -coverprofile=coverage.txt -covermode=atomic
+
+
 build: sudoku
 
 
