@@ -383,10 +383,7 @@ func (puz *Puzzle) guess(r, c int, ch chan bool) {
 		}
 		puz[r][c] = glyph
 		if puz.Validate() == nil {
-			nr, nc, found := puz.NextUnknown(r, c)
-			if !found && (r != 0 || c != 0) {
-				nr, nc, found = puz.NextUnknown(0, 0)
-			}
+			nr, nc, found := puz.FindUnknown(r, c)
 			if found {
 				// So far so good, recurse to the next cell.
 				nch := make(chan bool)

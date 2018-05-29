@@ -71,11 +71,7 @@ func (puz *Puzzle) AttemptSolution(ch chan bool) {
 	random := rand.New(rand.NewSource(time.Now().UnixNano()))
 	r := random.Intn(Size)
 	c := random.Intn(Size)
-	found := false
-	r, c, found = puz.NextUnknown(r, c)
-	if !found && (r != 0 || c != 0) {
-		r, c, found = puz.NextUnknown(0, 0)
-	}
+	r, c, _ = puz.FindUnknown(r, c)
 	guess := make(chan bool)
 	go puz.guess(r, c, guess)
 	ch <- <-guess
