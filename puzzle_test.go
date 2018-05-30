@@ -428,6 +428,79 @@ func TestPuzzleMerge(t *testing.T) {
 	}
 }
 
+func TestPuzzleApplyMask(t *testing.T) {
+	p := Puzzle{
+		{'1', ' ', '3', ' ', ' ', '6', ' ', '8', ' '},
+		{' ', '5', ' ', ' ', '8', ' ', '1', '2', ' '},
+		{'7', ' ', '9', '1', ' ', '3', ' ', '5', '6'},
+		{' ', '3', ' ', ' ', '6', '7', ' ', '9', ' '},
+		{'5', ' ', '7', '8', ' ', ' ', ' ', '3', ' '},
+		{'8', ' ', '1', ' ', '3', ' ', '5', ' ', '7'},
+		{' ', '4', ' ', ' ', '7', '8', ' ', '1', ' '},
+		{'6', ' ', '8', ' ', ' ', '2', ' ', '4', ' '},
+		{' ', '1', '2', ' ', '4', '5', ' ', '7', '8'}}
+	var m Mask
+	// No cells masked
+	result := p.ApplyMask(&m)
+	expect := Puzzle{
+		{' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '},
+		{' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '},
+		{' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '},
+		{' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '},
+		{' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '},
+		{' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '},
+		{' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '},
+		{' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '},
+		{' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '}}
+	if !result.Equal(expect) {
+		t.Errorf("incorrect result from ApplyMask: expected\n%v\n\ngot\n%v", expect.String(), result.String())
+	}
+
+	// R7C5 only masked
+	m[6][4] = true
+	expect = Puzzle{
+		{' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '},
+		{' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '},
+		{' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '},
+		{' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '},
+		{' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '},
+		{' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '},
+		{' ', ' ', ' ', ' ', '7', ' ', ' ', ' ', ' '},
+		{' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '},
+		{' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '}}
+
+	result = p.ApplyMask(&m)
+	if !result.Equal(expect) {
+		t.Errorf("incorrect result from ApplyMask: expected\n%v\n\ngot\n%v", expect.String(), result.String())
+	}
+
+	// Everything masked
+	m = Mask{
+		{true, true, true, true, true, true, true, true, true},
+		{true, true, true, true, true, true, true, true, true},
+		{true, true, true, true, true, true, true, true, true},
+		{true, true, true, true, true, true, true, true, true},
+		{true, true, true, true, true, true, true, true, true},
+		{true, true, true, true, true, true, true, true, true},
+		{true, true, true, true, true, true, true, true, true},
+		{true, true, true, true, true, true, true, true, true},
+		{true, true, true, true, true, true, true, true, true}}
+	expect = Puzzle{
+		{'1', ' ', '3', ' ', ' ', '6', ' ', '8', ' '},
+		{' ', '5', ' ', ' ', '8', ' ', '1', '2', ' '},
+		{'7', ' ', '9', '1', ' ', '3', ' ', '5', '6'},
+		{' ', '3', ' ', ' ', '6', '7', ' ', '9', ' '},
+		{'5', ' ', '7', '8', ' ', ' ', ' ', '3', ' '},
+		{'8', ' ', '1', ' ', '3', ' ', '5', ' ', '7'},
+		{' ', '4', ' ', ' ', '7', '8', ' ', '1', ' '},
+		{'6', ' ', '8', ' ', ' ', '2', ' ', '4', ' '},
+		{' ', '1', '2', ' ', '4', '5', ' ', '7', '8'}}
+	result = p.ApplyMask(&m)
+	if !result.Equal(expect) {
+		t.Errorf("incorrect result from ApplyMask: expected\n%v\n\ngot\n%v", expect.String(), result.String())
+	}
+}
+
 func TestFindDuplicate(t *testing.T) {
 	tests := [][]byte{
 		{'1', ' ', '3', ' ', ' ', '6', ' ', '8', ' '},

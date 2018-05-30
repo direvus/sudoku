@@ -22,6 +22,7 @@ var Glyphs = [Size]byte{'1', '2', '3', '4', '5', '6', '7', '8', '9'}
 
 // Puzzle represents a 9×9 sudoku grid.
 type Puzzle [Size][Size]byte
+type Mask [Size][Size]bool
 
 // Known returns whether the given glyph indicates a known value.
 //
@@ -233,6 +234,25 @@ func (dest *Puzzle) Merge(source Puzzle) {
 			}
 		}
 	}
+}
+
+// ApplyMask returns a new puzzle with a boolean mask applied.
+//
+// For each cell in the source puzzle, check the corresponding cell in the
+// given mask object.  If the cell is true in the mask, then the cell in the
+// output puzzle has the same value as the cell in the source puzzle.  If the
+// cell is false in the mask, the cell in the output puzzle is Unknown.
+func (source *Puzzle) ApplyMask(mask *Mask) (puzzle Puzzle) {
+	for i := 0; i < Size; i++ {
+		for j := 0; j < Size; j++ {
+			if mask[i][j] {
+				puzzle[i][j] = source[i][j]
+			} else {
+				puzzle[i][j] = Unknown
+			}
+		}
+	}
+	return
 }
 
 // Validate a puzzle for correctness.
