@@ -633,3 +633,35 @@ func TestPuzzleClear(t *testing.T) {
 		t.Errorf("invalid result from Clear(), expected all zero bytes, got:\n\n%v", puz.String())
 	}
 }
+
+func TestPuzzleUnknowns(t *testing.T) {
+	puz := Puzzle{
+		{'1', ' ', '3', ' ', ' ', '6', ' ', '8', ' '},
+		{' ', '5', ' ', ' ', '8', ' ', '1', '2', ' '},
+		{'7', ' ', '9', '1', ' ', '3', ' ', '5', '6'},
+		{' ', '3', ' ', ' ', '6', '7', ' ', '9', ' '},
+		{'5', ' ', '7', '8', ' ', ' ', ' ', '3', ' '},
+		{'8', ' ', '1', ' ', '3', ' ', '5', ' ', '7'},
+		{' ', '4', ' ', ' ', '7', '8', ' ', '1', ' '},
+		{'6', ' ', '8', ' ', ' ', '2', ' ', '4', ' '},
+		{' ', '1', '2', ' ', '4', '5', ' ', '7', '8'}}
+	expect := []CellRef{
+		{0, 1}, {0, 3}, {0, 4}, {0, 6}, {0, 8},
+		{1, 0}, {1, 2}, {1, 3}, {1, 5}, {1, 8},
+		{2, 1}, {2, 4}, {2, 6},
+		{3, 0}, {3, 2}, {3, 3}, {3, 6}, {3, 8},
+		{4, 1}, {4, 4}, {4, 5}, {4, 6}, {4, 8},
+		{5, 1}, {5, 3}, {5, 5}, {5, 7},
+		{6, 0}, {6, 2}, {6, 3}, {6, 6}, {6, 8},
+		{7, 1}, {7, 3}, {7, 4}, {7, 6}, {7, 8},
+		{8, 0}, {8, 3}, {8, 6}}
+	result := puz.Unknowns()
+	if len(result) != len(expect) {
+		t.Errorf("incorrect return from Unknowns: expected %v cells, got %v", len(expect), len(result))
+	}
+	for i := 0; i < len(result); i++ {
+		if result[i] != expect[i] {
+			t.Errorf("incorrect return from Unknowns: expected %v at index %v, got %v", expect[i], i, result[i])
+		}
+	}
+}

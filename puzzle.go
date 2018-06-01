@@ -222,6 +222,18 @@ func (puz *Puzzle) FindUnknown(r, c int) (row, column int, found bool) {
 	return
 }
 
+// Unknowns returns a slice of all unknown CellRefs in the puzzle.
+func (puz *Puzzle) Unknowns() (refs []CellRef) {
+	for i := 0; i < Size; i++ {
+		for j := 0; j < Size; j++ {
+			if !Known(puz[i][j]) {
+				refs = append(refs, CellRef{i, j})
+			}
+		}
+	}
+	return
+}
+
 // Merge copies bytes from 'source' into 'dest'.
 //
 // Null (0x00) bytes in the source are disregarded.
