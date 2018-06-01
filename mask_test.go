@@ -140,7 +140,7 @@ func TestMaskFill(t *testing.T) {
 		t.Errorf("incorrect result from Fill: expected all true values, got\n%v", m.String())
 	}
 	m.Fill(false)
-	expect := Mask{
+	expect = Mask{
 		{false, false, false, false, false, false, false, false, false},
 		{false, false, false, false, false, false, false, false, false},
 		{false, false, false, false, false, false, false, false, false},
