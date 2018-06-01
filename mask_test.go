@@ -137,6 +137,20 @@ func TestMaskFill(t *testing.T) {
 		{true, true, true, true, true, true, true, true, true},
 		{true, true, true, true, true, true, true, true, true}}
 	if !m.Equal(expect) {
-		t.Errorf("incorrect result from Fill: expected all true values, got\n%v", m.String()) 
+		t.Errorf("incorrect result from Fill: expected all true values, got\n%v", m.String())
+	}
+	m.Fill(false)
+	expect := Mask{
+		{false, false, false, false, false, false, false, false, false},
+		{false, false, false, false, false, false, false, false, false},
+		{false, false, false, false, false, false, false, false, false},
+		{false, false, false, false, false, false, false, false, false},
+		{false, false, false, false, false, false, false, false, false},
+		{false, false, false, false, false, false, false, false, false},
+		{false, false, false, false, false, false, false, false, false},
+		{false, false, false, false, false, false, false, false, false},
+		{false, false, false, false, false, false, false, false, false}}
+	if !m.Equal(expect) {
+		t.Errorf("incorrect result from Fill: expected all false values, got\n%v", m.String())
 	}
 }
