@@ -22,7 +22,6 @@ var Glyphs = [Size]byte{'1', '2', '3', '4', '5', '6', '7', '8', '9'}
 
 // Puzzle represents a 9×9 sudoku grid.
 type Puzzle [Size][Size]byte
-type Mask [Size][Size]bool
 
 // Known returns whether the given glyph indicates a known value.
 //
