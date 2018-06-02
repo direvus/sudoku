@@ -154,3 +154,48 @@ func TestMaskFill(t *testing.T) {
 		t.Errorf("incorrect result from Fill: expected all false values, got\n%v", m.String())
 	}
 }
+
+func TestMaskCount(t *testing.T) {
+	var m Mask
+	count := m.Count(false)
+	expect := Size*Size
+	if count != expect {
+		t.Errorf("incorrect result from Count: expected %v, got %v", expect, count)
+	}
+	count = m.Count(true)
+	expect = 0
+	if count != expect {
+		t.Errorf("incorrect result from Count: expected %v, got %v", expect, count)
+	}
+	m.Fill(true)
+	count = m.Count(true)
+	expect = Size*Size
+	if count != expect {
+		t.Errorf("incorrect result from Count: expected %v, got %v", expect, count)
+	}
+	count = m.Count(false)
+	expect = 0
+	if count != expect {
+		t.Errorf("incorrect result from Count: expected %v, got %v", expect, count)
+	}
+	m = Mask{
+		{ true, false,  true, false, false,  true, false,  true, false},
+		{false,  true, false, false,  true, false,  true,  true, false},
+		{ true, false,  true,  true, false,  true, false,  true,  true},
+		{false,  true, false, false,  true,  true, false,  true, false},
+		{ true, false,  true,  true, false, false, false,  true, false},
+		{ true, false,  true, false,  true, false,  true, false,  true},
+		{false,  true, false, false,  true,  true, false,  true, false},
+		{ true, false,  true, false, false,  true, false,  true, false},
+		{false,  true,  true, false,  true,  true, false,  true,  true}}
+	count = m.Count(true)
+	expect = 41
+	if count != expect {
+		t.Errorf("incorrect result from Count: expected %v, got %v", expect, count)
+	}
+	count = m.Count(false)
+	expect = 40
+	if count != expect {
+		t.Errorf("incorrect result from Count: expected %v, got %v", expect, count)
+	}
+}

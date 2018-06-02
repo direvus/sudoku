@@ -43,3 +43,15 @@ func (m *Mask) Fill(v bool) {
 		}
 	}
 }
+
+// Count returns the number of cells in the Mask having the given value.
+func (m *Mask) Count(v bool) (count int) {
+	for i := 0; i < Size; i++ {
+		for j := 0; j < Size; j++ {
+			if m[i][j] == v {
+				count++
+			}
+		}
+	}
+	return
+}
