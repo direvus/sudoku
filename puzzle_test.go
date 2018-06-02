@@ -697,3 +697,30 @@ func TestPuzzleKnowns(t *testing.T) {
 		}
 	}
 }
+
+func TestPuzzleGetMask(t *testing.T) {
+	puz := Puzzle{
+		{'1', ' ', '3', ' ', ' ', '6', ' ', '8', ' '},
+		{' ', '5', ' ', ' ', '8', ' ', '1', '2', ' '},
+		{'7', ' ', '9', '1', ' ', '3', ' ', '5', '6'},
+		{' ', '3', ' ', ' ', '6', '7', ' ', '9', ' '},
+		{'5', ' ', '7', '8', ' ', ' ', ' ', '3', ' '},
+		{'8', ' ', '1', ' ', '3', ' ', '5', ' ', '7'},
+		{' ', '4', ' ', ' ', '7', '8', ' ', '1', ' '},
+		{'6', ' ', '8', ' ', ' ', '2', ' ', '4', ' '},
+		{' ', '1', '2', ' ', '4', '5', ' ', '7', '8'}}
+	expect := Mask{
+		{ true, false,  true, false, false,  true, false,  true, false},
+		{false,  true, false, false,  true, false,  true,  true, false},
+		{ true, false,  true,  true, false,  true, false,  true,  true},
+		{false,  true, false, false,  true,  true, false,  true, false},
+		{ true, false,  true,  true, false, false, false,  true, false},
+		{ true, false,  true, false,  true, false,  true, false,  true},
+		{false,  true, false, false,  true,  true, false,  true, false},
+		{ true, false,  true, false, false,  true, false,  true, false},
+		{false,  true,  true, false,  true,  true, false,  true,  true}}
+	mask := puz.GetMask()
+	if !mask.Equal(expect) {
+		t.Errorf("incorrect result from GetMask: expected\n%v\n\ngot\n%v", expect.String(), mask.String())
+	}
+}

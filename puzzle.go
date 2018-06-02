@@ -278,6 +278,20 @@ func (source *Puzzle) ApplyMask(mask *Mask) (puzzle Puzzle) {
 	return
 }
 
+// GetMask returns a mask corresponding to known values in the puzzle.
+//
+// For every known value in the puzzle, the corresponding cell in the mask will
+// be true.  For every unknown value, the corresponding cell in the mask will
+// be false.
+func (puz *Puzzle) GetMask() (mask Mask) {
+	for i := 0; i < Size; i++ {
+		for j := 0; j < Size; j++ {
+			mask[i][j] = Known(puz[i][j])
+		}
+	}
+	return
+}
+
 // Validate a puzzle for correctness.
 //
 // A puzzle is incorrect if it contains the same glyph more than once on any
