@@ -5,6 +5,11 @@ import (
 	"time"
 )
 
+// newRand() returns a new random generator initialised with the current time.
+func newRand() *rand.Rand {
+	return rand.New(rand.NewSource(time.Now().UnixNano()))
+}
+
 // SeedSolution populates random glyphs into a sudoku puzzle.
 //
 // It does this by randomly selecting an unknown cell, and then trying random
@@ -27,7 +32,7 @@ func (puz *Puzzle) SeedSolution(n int, ch chan int) {
 			return
 		}
 		// Select an unknown cell at random
-		random := rand.New(rand.NewSource(time.Now().UnixNano()))
+		random := newRand()
 		var r, c int
 		for {
 			r := random.Intn(Size)
@@ -68,7 +73,7 @@ func (puz *Puzzle) AttemptSolution(ch chan bool) {
 		return
 	}
 	// Select a random cell to start guessing from.
-	random := rand.New(rand.NewSource(time.Now().UnixNano()))
+	random := newRand()
 	r := random.Intn(Size)
 	c := random.Intn(Size)
 	r, c, _ = puz.FindUnknown(r, c)
