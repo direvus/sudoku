@@ -234,6 +234,18 @@ func (puz *Puzzle) Unknowns() (refs []CellRef) {
 	return
 }
 
+// Knowns returns a slice of all known CellRefs in the puzzle.
+func (puz *Puzzle) Knowns() (refs []CellRef) {
+	for i := 0; i < Size; i++ {
+		for j := 0; j < Size; j++ {
+			if Known(puz[i][j]) {
+				refs = append(refs, CellRef{i, j})
+			}
+		}
+	}
+	return
+}
+
 // Merge copies bytes from 'source' into 'dest'.
 //
 // Null (0x00) bytes in the source are disregarded.
