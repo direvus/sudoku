@@ -5,6 +5,8 @@ import (
 	"time"
 )
 
+const MIN_CLUES = 17
+
 // newRand() returns a new random generator initialised with the current time.
 func newRand() *rand.Rand {
 	return rand.New(rand.NewSource(time.Now().UnixNano()))
@@ -101,5 +103,48 @@ func GenerateSolution() (puz Puzzle) {
 			}
 		}
 	}
+	return
+}
+
+// MinimalMask returns a minimal clue mask for the given solution.
+//
+// A minimal clue mask is one from which no clues can be removed without
+// causing the puzzle to have multiple solutions.  Each true value in the mask
+// indicates the position of a clue in the puzzle, while each false value
+// indicates a hidden cell.
+func (puz *Puzzle) MinimalMask() (mask Mask) {
+	var sol Puzzle
+	sol.Merge(*puz)
+	knowns := sol.Knowns()
+	swapper := func(i, j int) {
+		knowns[i], knowns[j] = knowns[j], knowns[i]
+	}
+	count := len(knowns)
+	random := newRand()
+	for count >= MIN_CLUES {
+		random.Shuffle(count, swapper)
+		found := false
+		for i, cell := range knowns {
+			var attempt Puzzle
+			attempt.Merge(sol)
+			attempt.SetCell(cell, Unknown)
+			n := attempt.NumSolutions()
+			if n == 1 {
+				// So far so good.  Drop the cell from the solution and start
+				// the next pass.
+				sol.SetCell(cell, Unknown)
+				swapper(i, count-1)
+				knowns = knowns[:count-1]
+				count--
+				found = true
+				break
+			}
+		}
+		if !found {
+			// None of the known cells could be safely removed.  Exit out.
+			break
+		}
+	}
+	mask = sol.GetMask()
 	return
 }
