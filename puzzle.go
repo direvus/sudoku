@@ -246,6 +246,16 @@ func (puz *Puzzle) Knowns() (refs []CellRef) {
 	return
 }
 
+// GetCell returns the value of the cell at the given CellRef.
+func (puz *Puzzle) GetCell(cell CellRef) byte {
+	return puz[cell.row][cell.col]
+}
+
+// SetCell sets the value of the cell at the given CellRef.
+func (puz *Puzzle) SetCell(cell CellRef, v byte) {
+	puz[cell.row][cell.col] = v
+}
+
 // Merge copies bytes from 'source' into 'dest'.
 //
 // Null (0x00) bytes in the source are disregarded.
