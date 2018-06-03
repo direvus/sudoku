@@ -1,6 +1,6 @@
 package sudoku
 
-// GuessCount counts the number of solutions to a puzzle by guesswork.
+// guessCount counts the number of solutions to a puzzle by guesswork.
 //
 // Starting with the given cell, guessCount tries each glyph in turn, and if it
 // finds a valid glyph, recurses on to the next unknown cell and repeats the
@@ -11,15 +11,16 @@ package sudoku
 // solution has been found, it immediately writes to the channel and returns.
 func (puz *Puzzle) guessCount(r, c int, ch chan int) {
 	subgrid := CellSubGrid(r, c)
+	index := coordsToIndex(r, c)
 	count := 0
-	orig := puz[r][c]
+	orig := puz[index]
 	for _, glyph := range Glyphs {
 		if (puz.glyphInRow(glyph, r, c) ||
 				puz.glyphInColumn(glyph, c, r) ||
 				puz.glyphInSubGrid(glyph, subgrid, r, c)) {
 			continue
 		}
-		puz[r][c] = glyph
+		puz[index] = glyph
 		if puz.Validate() == nil {
 			nr, nc, found := puz.NextUnknown(r, c)
 			if found {
@@ -36,7 +37,7 @@ func (puz *Puzzle) guessCount(r, c int, ch chan int) {
 			}
 		}
 	}
-	puz[r][c] = orig
+	puz[index] = orig
 	ch <- count
 }
 

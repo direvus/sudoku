@@ -35,24 +35,23 @@ func (puz *Puzzle) SeedSolution(n int, ch chan int) {
 		}
 		// Select an unknown cell at random
 		random := newRand()
-		var r, c int
+		var index int
 		for {
-			r := random.Intn(Size)
-			c := random.Intn(Size)
-			if !Known(puz[r][c]) {
+			index := random.Intn(GridSize)
+			if !Known(puz[index]) {
 				break
 			}
 		}
 		// Shuffle the glyphs array and try each glyph in turn
 		random.Shuffle(len(glyphs), swapper)
 		for j := 0; j < len(glyphs); j++ {
-			puz[r][c] = glyphs[j]
+			puz[index] = glyphs[j]
 			if puz.Validate() == nil {
 				break
 			}
-			puz[r][c] = Unknown
+			puz[index] = Unknown
 		}
-		if !Known(puz[r][c]) {
+		if !Known(puz[index]) {
 			break
 		}
 	}

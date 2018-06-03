@@ -2,22 +2,20 @@ package sudoku
 
 import "bytes"
 
-type Mask [Size][Size]bool
+type Mask [GridSize]bool
 
 func (m *Mask) String() string {
 	var buf bytes.Buffer
-	for i := 0; i < Size; i++ {
-		for j := 0; j < Size; j++ {
-			if m[i][j] {
-				buf.WriteString("✓")
-			} else {
-				buf.WriteString("✗")
-			}
-			if j < Size-1 {
-				buf.WriteByte(' ')
-			} else {
-				buf.WriteByte('\n')
-			}
+	for i := 0; i < GridSize; i++ {
+		if m[i] {
+			buf.WriteString("✓")
+		} else {
+			buf.WriteString("✗")
+		}
+		if i % Size == Size-1 {
+			buf.WriteByte('\n')
+		} else {
+			buf.WriteByte(' ')
 		}
 	}
 	return buf.String()
@@ -25,11 +23,9 @@ func (m *Mask) String() string {
 
 // Equal returns whether two masks contain the same values.
 func (a *Mask) Equal(b Mask) bool {
-	for i := 0; i < Size; i++ {
-		for j := 0; j < Size; j++ {
-			if a[i][j] != b[i][j] {
-				return false
-			}
+	for i := 0; i < GridSize; i++ {
+		if a[i] != b[i] {
+			return false
 		}
 	}
 	return true
@@ -37,20 +33,16 @@ func (a *Mask) Equal(b Mask) bool {
 
 // Fill sets all values of the Mask to 'v'.
 func (m *Mask) Fill(v bool) {
-	for i := 0; i < Size; i++ {
-		for j := 0; j < Size; j++ {
-			m[i][j] = v
-		}
+	for i := 0; i < GridSize; i++ {
+		m[i] = v
 	}
 }
 
 // Count returns the number of cells in the Mask having the given value.
 func (m *Mask) Count(v bool) (count int) {
-	for i := 0; i < Size; i++ {
-		for j := 0; j < Size; j++ {
-			if m[i][j] == v {
-				count++
-			}
+	for i := 0; i < GridSize; i++ {
+		if m[i] == v {
+			count++
 		}
 	}
 	return

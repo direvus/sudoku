@@ -10,7 +10,7 @@ func (puz *Puzzle) Candidates(r, c int) (result []byte) {
 	// Eliminate glyphs in same row.
 	for i := 0; i < Size; i++ {
 		if i != c {
-			glyph := puz[r][i]
+			glyph := puz[coordsToIndex(r, i)]
 			if Known(glyph) {
 				candidates[glyph] = false
 			}
@@ -19,7 +19,7 @@ func (puz *Puzzle) Candidates(r, c int) (result []byte) {
 	// Eliminate glyphs in same column.
 	for i := 0; i < Size; i++ {
 		if i != r {
-			glyph := puz[i][c]
+			glyph := puz[coordsToIndex(i, c)]
 			if Known(glyph) {
 				candidates[glyph] = false
 			}
@@ -31,7 +31,7 @@ func (puz *Puzzle) Candidates(r, c int) (result []byte) {
 	for i := sr; i < sr+SubSize; i++ {
 		for j := sc; j < sc+SubSize; j++ {
 			if i != r || j != c {
-				glyph := puz[i][j]
+				glyph := puz[coordsToIndex(i, j)]
 				if Known(glyph) {
 					candidates[glyph] = false
 				}
@@ -53,7 +53,7 @@ func (puz *Puzzle) Candidates(r, c int) (result []byte) {
 func (puz *Puzzle) solveSolo(r, c int, ch chan bool) {
 	candidates := puz.Candidates(r, c)
 	if len(candidates) == 1 {
-		puz[r][c] = candidates[0]
+		puz[coordsToIndex(r, c)] = candidates[0]
 		ch <- true
 	} else {
 		ch <- false
@@ -69,7 +69,7 @@ func (puz *Puzzle) glyphInRow(glyph byte, r, c int) bool {
 		if i == c {
 			continue
 		}
-		if puz[r][i] == glyph {
+		if puz[coordsToIndex(r, i)] == glyph {
 			return true
 		}
 	}
@@ -84,7 +84,7 @@ func (puz *Puzzle) glyphInColumn(glyph byte, c, r int) bool {
 		if i == r {
 			continue
 		}
-		if puz[i][c] == glyph {
+		if puz[coordsToIndex(i, c)] == glyph {
 			return true
 		}
 	}
@@ -99,17 +99,17 @@ func (puz *Puzzle) glyphInColumn(glyph byte, c, r int) bool {
 // can be disabled by specifying a row or column that is not valid for the
 // subgrid (negative numbers will never be valid, so -1 is a good choice here).
 func (puz *Puzzle) glyphInSubGrid(glyph byte, subgrid, r, c int) bool {
-	sr := (subgrid / 3) * 3
+	sr := (subgrid / SubSize) * SubSize
 	for i := sr; i < sr+SubSize; i++ {
 		if i == r {
 			continue
 		}
-		sc := (subgrid % 3) * 3
+		sc := (subgrid % SubSize) * 3
 		for j := sc; j < sc+SubSize; j++ {
 			if j == c {
 				continue
 			}
-			if puz[i][j] == glyph {
+			if puz[coordsToIndex(i, j)] == glyph {
 				return true
 			}
 		}
@@ -125,13 +125,14 @@ func (puz *Puzzle) glyphInSubGrid(glyph byte, subgrid, r, c int) bool {
 func (puz *Puzzle) solveRow(glyph byte, r int, ch chan bool) {
 	var locs [Size]bool
 	var num int
+	index := coordsToIndex(r, 0)
 	for i := 0; i < Size; i++ {
-		if puz[r][i] == glyph {
+		if puz[index+i] == glyph {
 			// Glyph is already present in this row, quit.
 			ch <- false
 			return
 		}
-		if !Known(puz[r][i]) {
+		if !Known(puz[index+i]) {
 			// Candidate location.  Look for the glyph elsewhere in this column
 			// to see whether it can be ruled out.
 			if !puz.glyphInColumn(glyph, i, r) {
@@ -169,7 +170,7 @@ func (puz *Puzzle) solveRow(glyph byte, r int, ch chan bool) {
 	if num == 1 {
 		for i := 0; i < Size; i++ {
 			if locs[i] {
-				puz[r][i] = glyph
+				puz[index+i] = glyph
 				ch <- true
 				return
 			}
@@ -186,13 +187,14 @@ func (puz *Puzzle) solveRow(glyph byte, r int, ch chan bool) {
 func (puz *Puzzle) solveColumn(glyph byte, c int, ch chan bool) {
 	var locs [Size]bool
 	var num int
+	index := c
 	for i := 0; i < Size; i++ {
-		if puz[i][c] == glyph {
+		if puz[i*Size+index] == glyph {
 			// Glyph is already present in this column, quit.
 			ch <- false
 			return
 		}
-		if !Known(puz[i][c]) {
+		if !Known(puz[i*Size+index]) {
 			// Candidate location.  Look for the glyph elsewhere in this row
 			// to see whether it can be ruled out.
 			if !puz.glyphInRow(glyph, i, c) {
@@ -230,7 +232,7 @@ func (puz *Puzzle) solveColumn(glyph byte, c int, ch chan bool) {
 	if num == 1 {
 		for i := 0; i < Size; i++ {
 			if locs[i] {
-				puz[i][c] = glyph
+				puz[i*Size+index] = glyph
 				ch <- true
 				return
 			}
@@ -257,7 +259,8 @@ func (puz *Puzzle) solveSubGrid(glyph byte, subgrid int, ch chan bool) {
 		for j := 0; j < SubSize; j++ {
 			r := sr + i
 			c := sc + j
-			if puz[r][c] == glyph {
+			index := coordsToIndex(r, c)
+			if puz[index] == glyph {
 				// Glyph is already present in this subgrid, quit.
 				ch <- false
 				return
@@ -266,7 +269,7 @@ func (puz *Puzzle) solveSubGrid(glyph byte, subgrid int, ch chan bool) {
 				// Location has already been eliminated.
 				continue
 			}
-			if Known(puz[r][c]) {
+			if Known(puz[index]) {
 				locs[i][j] = false
 				num--
 				continue
@@ -299,7 +302,7 @@ func (puz *Puzzle) solveSubGrid(glyph byte, subgrid int, ch chan bool) {
 		for i := 0; i < Size; i++ {
 			for j := 0; j < SubSize; j++ {
 				if locs[i][j] {
-					puz[sr+i][sc+j] = glyph
+					puz[coordsToIndex(sr+i, sc+j)] = glyph
 					ch <- true
 					return
 				}
@@ -327,12 +330,10 @@ func (puz *Puzzle) SolveEasy() (remain int) {
 		}
 		curr := remain
 		ch := make(chan bool)
-		for i := 0; i < Size; i++ {
-			for j := 0; j < Size; j++ {
-				if Known(puz[i][j]) {
-					continue
-				}
-				go puz.solveSolo(i, j, ch)
+		for i := 0; i < GridSize; i++ {
+			if !Known(puz[i]) {
+				r, c := indexToCoords(i)
+				go puz.solveSolo(r, c, ch)
 			}
 		}
 		for i := 0; i < curr; i++ {
@@ -375,13 +376,14 @@ func (puz *Puzzle) SolveEasy() (remain int) {
 // discovered.
 func (puz *Puzzle) guess(r, c int, ch chan bool) {
 	subgrid := CellSubGrid(r, c)
+	index := coordsToIndex(r, c)
 	for _, glyph := range Glyphs {
 		if (puz.glyphInRow(glyph, r, c) ||
 				puz.glyphInColumn(glyph, c, r) ||
 				puz.glyphInSubGrid(glyph, subgrid, r, c)) {
 			continue
 		}
-		puz[r][c] = glyph
+		puz[index] = glyph
 		if puz.Validate() == nil {
 			nr, nc, found := puz.FindUnknown(r, c)
 			if found {
@@ -399,7 +401,7 @@ func (puz *Puzzle) guess(r, c int, ch chan bool) {
 		}
 	}
 	// No solution found
-	puz[r][c] = Unknown
+	puz[index] = Unknown
 	ch <- false
 }
 
@@ -413,13 +415,10 @@ func (puz *Puzzle) guess(r, c int, ch chan bool) {
 func (puz *Puzzle) Solve() (remain int) {
 	puz.SolveEasy()
 	ch := make(chan bool)
-	for i := 0; i < Size; i++ {
-		for j := 0; j < Size; j++ {
-			if !Known(puz[i][j]) {
-				go puz.guess(i, j, ch)
-				<-ch
-			}
-		}
+	r, c, found := puz.NextUnknown(0, 0)
+	if found {
+		go puz.guess(r, c, ch)
+		<-ch
 	}
 	return puz.NumUnknowns()
 }
