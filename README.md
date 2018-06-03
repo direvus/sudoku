@@ -20,7 +20,7 @@ written as a submission for that challenge.
 Build instructions
 -------
 
-- Install go
+- Install go v1.10.x
 - Checkout source
 - Execute `make build`
 - Copy the resulting binaries wherever you like
