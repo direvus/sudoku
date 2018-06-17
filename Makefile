@@ -2,7 +2,7 @@ GO=go
 GOFMT=gofmt
 
 
-.PHONY: test bench format build
+.PHONY: test bench format install
 
 
 test:
@@ -21,13 +21,5 @@ cover:
 	${GO} test -coverprofile=coverage.txt -covermode=atomic
 
 
-build: build/sudoku-solve build/sudoku-gen
-
-
-build/sudoku-%: cmd/sudoku-%.go
-	@mkdir -p build
-	${GO} build -o $@ $<
-
-
-clean:
-	-rm -vf build/*
+install:
+	${GO} install ./...
