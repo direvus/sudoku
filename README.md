@@ -2,8 +2,7 @@
 [![codecov](https://codecov.io/gh/direvus/sudoku/branch/master/graph/badge.svg)](https://codecov.io/gh/direvus/sudoku)
 
 
-Sudoku - すどく
-======
+# Sudoku - すどく
 
 https://github.com/direvus/sudoku
 
@@ -17,8 +16,8 @@ Andrew Gerrand's November 2015 Go Challenge
 [http://golang-challenge.org/go-challenge8/], although this library is not
 written as a submission for that challenge.
 
-Build instructions
--------
+
+## Build instructions
 
 - Install go v1.10.x
 - Checkout source
@@ -27,10 +26,11 @@ Build instructions
 - Use them!
 
 
-Usage instructions
--------
+## Usage instructions
 
-The `sudoku` executable takes a sudoku puzzle on stdin, attempts to solve it,
+### sudoku-solve
+
+The `sudoku-solve` executable takes a sudoku puzzle on stdin, attempts to solve it,
 and produces the result on stdout.
 
 The input format is one line per row, each line terminated by a single newline
@@ -50,8 +50,8 @@ So, for example:
 	_ 7 _ _ 9 _ _ _ _
 	_ 8 2 1 _ _ 4 _ _
 
-License
--------
+
+## License
 
 This library is released under the terms of the BSD 2-clause license, a copy of
 which can be found in the file 'LICENSE' at the root directory of this

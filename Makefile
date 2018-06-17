@@ -21,8 +21,8 @@ cover:
 	${GO} test -coverprofile=coverage.txt -covermode=atomic
 
 
-build: sudoku
+build: sudoku-solve
 
 
-sudoku: cmd/sudoku.go
-	${GO} build cmd/sudoku.go
+sudoku-solve: cmd/sudoku-solve.go
+	${GO} build cmd/sudoku-solve.go
