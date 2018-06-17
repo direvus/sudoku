@@ -50,6 +50,16 @@ So, for example:
 	_ 7 _ _ 9 _ _ _ _
 	_ 8 2 1 _ _ 4 _ _
 
+### sudoku-gen
+
+The `sudoku-gen` executable generates a random sudoku solution grid, and a
+random selection of clues to offer, and produces the resulting puzzle on
+stdout.  The output format is identical to the input and output format of
+`sudoku-solve`.
+
+The selection of clues is 'minimal', meaning that removing any of the clues
+would result in an improper puzzle (i.e., a puzzle with more than one possible
+solution).
 
 ## License
 
