@@ -20,9 +20,9 @@ written as a submission for that challenge.
 ## Build instructions
 
 - Install go v1.10.x
-- Checkout source
+- Checkout the repository
 - Execute `make build`
-- Copy the resulting binaries wherever you like
+- Copy the resulting binaries from `build/` to wherever you like
 - Use them!
 
 

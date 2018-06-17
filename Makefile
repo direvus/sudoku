@@ -21,8 +21,13 @@ cover:
 	${GO} test -coverprofile=coverage.txt -covermode=atomic
 
 
-build: sudoku-solve sudoku-gen
+build: build/sudoku-solve build/sudoku-gen
 
 
-sudoku-%: cmd/sudoku-%.go
-	${GO} build $^
+build/sudoku-%: cmd/sudoku-%.go
+	@mkdir -p build
+	${GO} build -o $@ $<
+
+
+clean:
+	-rm -vf build/*
